@@ -99,14 +99,14 @@ public:
 
     static void irq_enable() {
         Reg32 flags;
-        ASMV("mrs %0, cpsr\n"
+        ASM("mrs %0, cpsr\n"
             "bic %0, %0, #0x80\n"
             "msr cpsr_c, %0\n":  "=r"(flags) : : "cc");
     }
 
     static void irq_disable() {
         Reg32 flags;
-        ASMV("mrs %0, cpsr\n"
+        ASM("mrs %0, cpsr\n"
             "orr %0, %0, #0x80\n"
             "msr cpsr_c, %0\n":  "=r"(flags) : : "cc");
 	}
@@ -123,30 +123,30 @@ public:
 
     static Flags flags() { 
         register Reg32 result;
-        ASMV("mrs %0, cpsr" : "=r"(result) ::);
+        ASM("mrs %0, cpsr" : "=r"(result) ::);
         return result;
     } 
     static void flags(Flags flags) {
-        ASMV("msr cpsr_c, %0" : : "r"(flags) :);
+        ASM("msr cpsr_c, %0" : : "r"(flags) :);
     }
 
     static void sp(Reg32 sp) {
-        ASMV("mov sp, %0" : : "r"(sp) : "sp");
+        ASM("mov sp, %0" : : "r"(sp) : "sp");
     }
 
     static Reg32 fr() {
         Reg32 return_value;
-        ASMV("mov %0, r0" : "=r" (return_value) : : "r0");
+        ASM("mov %0, r0" : "=r" (return_value) : : "r0");
         return return_value;
     }
 
     static void fr(Reg32 fr) {	
-        ASMV("mov r0, %0" : : "r" (fr) : "r0");
+        ASM("mov r0, %0" : : "r" (fr) : "r0");
     } 
 
     static Reg32 sp() {
         Reg32 return_value;
-        ASMV("mov %0, sp" : "=r" (return_value) : : );
+        ASM("mov %0, sp" : "=r" (return_value) : : );
         return return_value;
     }
     
@@ -156,14 +156,14 @@ public:
     static Log_Addr ip()
     { 
         register Reg32 result;
-        ASMV("mov %0, pc" : "=r"(result) : :);
+        ASM("mov %0, pc" : "=r"(result) : :);
         return result;
     } 
 
     static bool tsl(volatile bool & lock) {
         register Reg32 old;
-        ASMV("mov %0, #1" : : "r"(old) :);
-        ASMV("swp %0, %0, [%1]" :  : "r"(old), "r"(&lock) :);
+        ASM("mov %0, #1" : : "r"(old) :);
+        ASM("swp %0, %0, [%1]" :  : "r"(old), "r"(&lock) :);
         return old;
     }
 
@@ -171,9 +171,9 @@ public:
         register Reg32 old;
         static bool lock = false;
         while (tsl(lock));
-        ASMV("ldr %0, [%1]" : "=r"(old) : "r"(&value) :);
-        ASMV("add %0, %0, #1" : : "r"(old) :);
-        ASMV("swp %0, %0, [%1]" :  : "r"(old), "r"(&value) :);
+        ASM("ldr %0, [%1]" : "=r"(old) : "r"(&value) :);
+        ASM("add %0, %0, #1" : : "r"(old) :);
+        ASM("swp %0, %0, [%1]" :  : "r"(old), "r"(&value) :);
         lock = false;
         return old;
     }
@@ -182,12 +182,13 @@ public:
         register Reg32 old;
         static bool lock = false;
         while (tsl(lock));
-        ASMV("ldr %0, [%1]" : "=r"(old) : "r"(&value) :);
-        ASMV("sub %0, %0, #1" : : "r"(old) :);
-        ASMV("swp %0, %0, [%1]" :  : "r"(old), "r"(&value) :);
+        ASM("ldr %0, [%1]" : "=r"(old) : "r"(&value) :);
+        ASM("sub %0, %0, #1" : : "r"(old) :);
+        ASM("swp %0, %0, [%1]" :  : "r"(old), "r"(&value) :);
         lock = false;
         return old;
    }
+
 
     static Reg32 htonl(Reg32 v) { return swap32(v); }
     static Reg16 htons(Reg16 v) { return swap16(v); }

@@ -6,7 +6,7 @@
 #=========================================================================
 # PATHS
 #=========================================================================
-EPOS=/home/vargas/SO2/trunk
+EPOS=/home/helvetica/SO2/TF_SO2/2016.2_INE5424_Agrupamento2_PorteDoEposIIParaEposMote2
 TMP=/tmp
 INC=$EPOS/include
 SRC=$EPOS/src
