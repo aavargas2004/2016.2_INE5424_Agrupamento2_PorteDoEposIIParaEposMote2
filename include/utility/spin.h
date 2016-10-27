@@ -27,7 +27,9 @@ public:
     void acquire() {
         int me = This_Thread::id();
 
-        while(CPU::cas(_owner, 0, me) != me);
+      //  while(CPU::cas(_owner, 0, me) != me);    
+// Função cas nao consegue ser lida de forma adequada . Pedir ajuda do professor
+//Comportamento incomum , pois apesar de existir no armv7 essa função cas, que utiliza template e foi adquequada para esse caso e ainda sim nao funcionou, o porte do mips deveria apresentar o mesmo problema , ja que o spin tbm funcionaria para eposII e seria chamada a mesma função. No cpu do mips não tem tambem esta funçao cas e o funcionamento parece ter dado certo
         _level++;
 
         db<Spin>(TRC) << "Spin::acquire[SPIN=" << this << ",ID=" << me << "]() => {owner=" << _owner << ",level=" << _level << "}" << endl;
@@ -45,28 +47,7 @@ private:
     volatile int _owner;
 };
 
-// Flat Spin Lock
-class Simple_Spin
-{
-public:
-    Simple_Spin(): _locked(false) {}
 
-    void acquire() {
-        while(CPU::tsl(_locked));
-
-        db<Spin>(TRC) << "Spin::acquire[SPIN=" << this << "]()" << endl;
-    }
-
-    void release() {
-//        if(_locked)
-            _locked = 0;
-
-        db<Spin>(TRC) << "Spin::release[SPIN=" << this << "]()}" << endl;
-    }
-
-private:
-    volatile bool _locked;
-};
 
 __END_UTIL
 

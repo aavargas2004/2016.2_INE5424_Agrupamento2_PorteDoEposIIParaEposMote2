@@ -189,6 +189,10 @@ public:
         return old;
    }
 
+ 
+    
+
+
 
     static Reg32 htonl(Reg32 v) { return swap32(v); }
     static Reg16 htons(Reg16 v) { return swap16(v); }

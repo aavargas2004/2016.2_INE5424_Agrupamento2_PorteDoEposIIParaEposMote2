@@ -149,6 +149,7 @@ public:
 private:
     void enter() { _heap_lock(); }
     void leave() { _heap_unlock(); }
+
 };
 
 
