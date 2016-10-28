@@ -15,7 +15,7 @@
 
 __BEGIN_SYS
 
-class Machine_UART: public UART_Common
+class UART: public UART_Common
 {
 private:
     typedef IO_Map<Machine> IO;

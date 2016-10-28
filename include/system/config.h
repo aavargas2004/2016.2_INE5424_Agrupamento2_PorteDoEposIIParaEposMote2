@@ -118,7 +118,6 @@ namespace EPOS {
 
 #ifdef __mmod_emote2__
 #define __TSC_H                 __HEADER_ARCH(tsc)
-
 #define __FLASH_H               __HEADER_MACH(flash)
 #define __INFO_H             	__HEADER_MACH(info)
 #define __UART_H                __HEADER_MACH(uart)
