@@ -30,6 +30,7 @@ protected:
     static const int shift = ((unit+1)%2); // 0 for unit 1, and 1 for unit 2
     
     enum {
+		SINGLE_ENDED_ADC0 = 0,
 		OVERRIDE_ADC_UNIT_ON = 0x100 << shift,
 		OVERRIDE_ADC_OTHER_UNIT_ON = 0x300 >> shift,
 		CONTROL_MASTER_ON = 0x1,
