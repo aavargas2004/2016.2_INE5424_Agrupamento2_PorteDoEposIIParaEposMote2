@@ -22,13 +22,13 @@ private:
 	
 protected:
 
-	typedef void (*Interrupt_Handler)();
-	static Interrupt_Handler vector[];
 
    	IC() {}
 
 public:
-	
+	typedef void (*Interrupt_Handler)();
+	static Interrupt_Handler vector[];
+
 	enum {
 		IRQ_SWI = 0,
 		IRQ_UART1,

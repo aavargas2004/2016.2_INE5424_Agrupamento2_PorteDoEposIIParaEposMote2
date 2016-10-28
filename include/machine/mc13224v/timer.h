@@ -47,7 +47,7 @@ public:
 
     Timer(const Handler* handler, const INSTANCE instance){
 		// 100ms as a default period
-		MC13224V_Timer(10, handler, instance);
+		Timer(10, handler, instance);
     }
 
     Timer(const Hertz& f, Handler* handler, const INSTANCE instance):
@@ -71,7 +71,7 @@ public:
     }
 
     Timer(const Hertz & f) {
-    	db<MC13224V_Timer>(TRC) << "Timer(f=" << f << ")\n";
+    	db<Timer>(TRC) << "Timer(f=" << f << ")\n";
     	frequency(f);
     }
 

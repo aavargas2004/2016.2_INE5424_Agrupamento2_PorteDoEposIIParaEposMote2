@@ -16,7 +16,7 @@
 
 __BEGIN_SYS
 
-template<int unit> class MC13224V_ADC_Unit: public ADC_Common
+template<int unit> class  ADC_Unit: public ADC_Common
 {
 protected:
     typedef IO_Map<Machine> IO;
@@ -39,7 +39,7 @@ protected:
 	};
 
 public:
-	MC13224V_ADC_Unit(unsigned char channel = SINGLE_ENDED_ADC0, 
+	ADC_Unit(unsigned char channel = SINGLE_ENDED_ADC0, 
 					  Hertz frequency = DEFAULT_FREQUENCY) {
 		// Must aways produce < or = 300000Hz
         clock_divider(calculate_clock_divider(300000));
@@ -65,7 +65,7 @@ public:
         while(x--);
 	}
 
-	MC13224V_ADC_Unit(unsigned char channel, unsigned char reference,
+	ADC_Unit(unsigned char channel, unsigned char reference,
 		  unsigned char trigger, Hertz frequency) {
 	}
 
@@ -220,20 +220,20 @@ private:
 	}   
 };
 
-class MC13224V_ADC: public MC13224V_ADC_Unit<2>
+class ADC: public ADC_Unit<2>
 {
 public:
-	MC13224V_ADC(unsigned char channel, Hertz frequency = MC13224V_ADC_Unit<2>::DEFAULT_FREQUENCY):
-		MC13224V_ADC_Unit<2>(channel, frequency) { }	
+	ADC(unsigned char channel, Hertz frequency = ADC_Unit<2>::DEFAULT_FREQUENCY):
+		ADC_Unit<2>(channel, frequency) { }	
 };
 
-class MC13224V_Battery_ADC: public MC13224V_ADC_Unit<1>
+class Battery_ADC: public ADC_Unit<1>
 {
 public:
-	MC13224V_Battery_ADC(Hertz frequency): 
-		MC13224V_ADC_Unit<1>(BATTERY_CHANNEL, frequency) { }
-	MC13224V_Battery_ADC(): 
-		MC13224V_ADC_Unit<1>(BATTERY_CHANNEL, DEFAULT_FREQUENCY) { }
+	Battery_ADC(Hertz frequency): 
+		ADC_Unit<1>(BATTERY_CHANNEL, frequency) { }
+	Battery_ADC(): 
+		ADC_Unit<1>(BATTERY_CHANNEL, DEFAULT_FREQUENCY) { }
 };
 
 
