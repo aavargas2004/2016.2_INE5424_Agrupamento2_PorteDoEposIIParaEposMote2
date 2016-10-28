@@ -26,8 +26,11 @@ template <> struct Traits<TSC>: public Traits<void>
 {
 };
 
+//'COLORS' now is a member of 'EPOS::S::Traits<EPOS::S::MMU>'
 template <> struct Traits<MMU>: public Traits<void>
 {
+    static const bool colorful = false;
+    static const unsigned int COLORS = 1;
 };
 
 __END_SYS

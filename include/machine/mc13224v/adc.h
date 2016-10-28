@@ -21,9 +21,9 @@ template<int unit> class MC13224V_ADC_Unit: public ADC_Common
 protected:
     typedef IO_Map<Machine> IO;
     typedef TSC::Hertz Hertz;
-    typedef ARM7::Reg8 Reg8;
-    typedef ARM7::Reg16 Reg16;
-    typedef ARM7::Reg32 Reg32;
+    typedef CPU::Reg8 Reg8;
+    typedef CPU::Reg16 Reg16;
+    typedef CPU::Reg32 Reg32;
     typedef Traits<ADC> _Traits;
  
     static const Hertz DEFAULT_FREQUENCY = Traits<Machine>::CLOCK>>9;
@@ -158,65 +158,65 @@ private:
 	}
 
 	static Reg16 clock_divider () { 
-		return ARM7::in16(IO::ADC_CLOCK_DIVIDER); 
+		return CPU::in16(IO::ADC_CLOCK_DIVIDER); 
 	}
 	static void clock_divider(Reg16 value) {
-		ARM7::out16(IO::ADC_CLOCK_DIVIDER, value); 
+		CPU::out16(IO::ADC_CLOCK_DIVIDER, value); 
 	}   
 
 	static Reg16 prescale () { 
-		return ARM7::in16(IO::ADC_PRESCALE); 
+		return CPU::in16(IO::ADC_PRESCALE); 
 	}
 	static void prescale(Reg16 value) {
-		ARM7::out16(IO::ADC_PRESCALE, value); 
+		CPU::out16(IO::ADC_PRESCALE, value); 
 	}   
 
 	static Reg16 on_time () { 
-		return ARM7::in16(IO::ADC_ON_TIME); 
+		return CPU::in16(IO::ADC_ON_TIME); 
 	}
 	static void on_time(Reg16 value) {
-		ARM7::out16(IO::ADC_ON_TIME, value); 
+		CPU::out16(IO::ADC_ON_TIME, value); 
 	}   
 
 	static Reg16 convert_time () { 
-		return ARM7::in16(IO::ADC_CONVERT_TIME); 
+		return CPU::in16(IO::ADC_CONVERT_TIME); 
 	}
 	static void convert_time(Reg16 value) {
-		ARM7::out16(IO::ADC_CONVERT_TIME, value); 
+		CPU::out16(IO::ADC_CONVERT_TIME, value); 
 	}   
 
 	static Reg16 mode () { 
-		return ARM7::in16(IO::ADC_MODE); 
+		return CPU::in16(IO::ADC_MODE); 
 	}
 	static void mode(Reg16 value) {
-		ARM7::out16(IO::ADC_MODE, value); 
+		CPU::out16(IO::ADC_MODE, value); 
 	}   
 
 	static Reg16 override () { 
-		return ARM7::in16(IO::ADC_OVERRIDE); 
+		return CPU::in16(IO::ADC_OVERRIDE); 
 	}
 	static void override(Reg16 value) {
-		ARM7::out16(IO::ADC_OVERRIDE, value); 
+		CPU::out16(IO::ADC_OVERRIDE, value); 
 	}   
 
 	static Reg16 control () { 
-		return ARM7::in16(IO::ADC_CONTROL); 
+		return CPU::in16(IO::ADC_CONTROL); 
 	}
 	static void control(Reg16 value) {
-		ARM7::out16(IO::ADC_CONTROL, value); 
+		CPU::out16(IO::ADC_CONTROL, value); 
 	}   
 
 	static Reg16 ad_result () { 
 		if(unit == 1)
-			return ARM7::in16(IO::ADC_AD1_RESULT); 
+			return CPU::in16(IO::ADC_AD1_RESULT); 
 		else
-			return ARM7::in16(IO::ADC_AD2_RESULT); 
+			return CPU::in16(IO::ADC_AD2_RESULT); 
 	}
 	static void ad_result(Reg16 value) {
 		if(unit == 1)
-			ARM7::out16(IO::ADC_AD1_RESULT, value);
+			CPU::out16(IO::ADC_AD1_RESULT, value);
 		else
-			ARM7::out16(IO::ADC_AD2_RESULT, value);
+			CPU::out16(IO::ADC_AD2_RESULT, value);
 	}   
 };
 

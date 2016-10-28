@@ -10,7 +10,7 @@
 #define __mc13224v_nic_h
 
 #include <nic.h>
-#include <cmac.h>
+//#include <cmac.h>
 #include "radio.h"
 #include "buck_regulator.h"
 

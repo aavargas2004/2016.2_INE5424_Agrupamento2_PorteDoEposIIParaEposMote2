@@ -13,7 +13,7 @@
 
 __BEGIN_SYS
 
-class ARM7: public CPU_Common
+class CPU: public CPU_Common
 {
 private:
     typedef Traits<CPU> _Traits;
@@ -83,7 +83,7 @@ public:
     };
 
 public:
-    ARM7() {}
+    CPU() {}
 
     static void init();
 

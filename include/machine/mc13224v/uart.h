@@ -19,9 +19,9 @@ class Machine_UART: public UART_Common
 {
 private:
     typedef IO_Map<Machine> IO;
-    typedef ARM7::Reg8 Reg8;
-    typedef ARM7::Reg16 Reg16;
-    typedef ARM7::Reg32 Reg32;
+    typedef CPU::Reg8 Reg8;
+    typedef CPU::Reg16 Reg16;
+    typedef CPU::Reg32 Reg32;
 		
 public:
 	//UART IO Register Bit Offsets
@@ -100,64 +100,64 @@ public:
 
 private:
 	Reg16 ucon() {
-		return ARM7::in16((_unit == 0) ? IO::UART1_UCON : IO::UART2_UCON);
+		return CPU::in16((_unit == 0) ? IO::UART1_UCON : IO::UART2_UCON);
 	}
 	void ucon(Reg16 value) { 
-		ARM7::out16(((_unit == 0) ? IO::UART1_UCON : IO::UART2_UCON), value);
+		CPU::out16(((_unit == 0) ? IO::UART1_UCON : IO::UART2_UCON), value);
 	}   
 
 	Reg8 ustat() {
-		return ARM7::in8((_unit == 0) ? IO::UART1_USTAT : IO::UART2_USTAT);
+		return CPU::in8((_unit == 0) ? IO::UART1_USTAT : IO::UART2_USTAT);
 	}
 	void ustat(Reg8 value) { 
-		ARM7::out8(((_unit == 0) ? IO::UART1_USTAT : IO::UART2_USTAT), value);
+		CPU::out8(((_unit == 0) ? IO::UART1_USTAT : IO::UART2_USTAT), value);
 	}   
 
 	Reg8 udata() {
-		return ARM7::in8((_unit == 0) ? IO::UART1_UDATA : IO::UART2_UDATA);
+		return CPU::in8((_unit == 0) ? IO::UART1_UDATA : IO::UART2_UDATA);
 	}
 	void udata(Reg8 value) { 
-		ARM7::out8(((_unit == 0) ? IO::UART1_UDATA : IO::UART2_UDATA), value);
+		CPU::out8(((_unit == 0) ? IO::UART1_UDATA : IO::UART2_UDATA), value);
 	}   
 
 	Reg8 urxcon() {
-		return ARM7::in8((_unit == 0) ? IO::UART1_URXCON : IO::UART2_URXCON);
+		return CPU::in8((_unit == 0) ? IO::UART1_URXCON : IO::UART2_URXCON);
 	}
 	void urxcon(Reg8 value) { 
-		ARM7::out8(((_unit == 0) ? IO::UART1_URXCON : IO::UART2_URXCON), value);
+		CPU::out8(((_unit == 0) ? IO::UART1_URXCON : IO::UART2_URXCON), value);
 	}   
 
 	Reg8 utxcon() {
-		return ARM7::in8((_unit == 0) ? IO::UART1_UTXCON : IO::UART2_UTXCON);
+		return CPU::in8((_unit == 0) ? IO::UART1_UTXCON : IO::UART2_UTXCON);
 	}
 	void utxcon(Reg8 value) { 
-		ARM7::out8(((_unit == 0) ? IO::UART1_UTXCON : IO::UART2_UTXCON), value);
+		CPU::out8(((_unit == 0) ? IO::UART1_UTXCON : IO::UART2_UTXCON), value);
 	}   
 
 	Reg8 ucts() {
-		return ARM7::in8((_unit == 0) ? IO::UART1_UCTS : IO::UART2_UCTS);
+		return CPU::in8((_unit == 0) ? IO::UART1_UCTS : IO::UART2_UCTS);
 	}
 	void ucts(Reg8 value) { 
-		ARM7::out8(((_unit == 0) ? IO::UART1_UCTS : IO::UART2_UCTS), value);
+		CPU::out8(((_unit == 0) ? IO::UART1_UCTS : IO::UART2_UCTS), value);
 	}
 
 	Reg32 ubrcnt() {
-		return ARM7::in32((_unit == 0) ? IO::UART1_UBRCNT : IO::UART2_UBRCNT);
+		return CPU::in32((_unit == 0) ? IO::UART1_UBRCNT : IO::UART2_UBRCNT);
 	}
 	void ubrcnt(Reg32 value) { 
-		ARM7::out32(((_unit == 0) ? IO::UART1_UBRCNT : IO::UART2_UBRCNT), value);
+		CPU::out32(((_unit == 0) ? IO::UART1_UBRCNT : IO::UART2_UBRCNT), value);
 	}
 
 	void func_sel() {
 		Reg32 func_sel;
 
 		if(_unit == 0) {
-			func_sel = ARM7::in32(IO::GPIO_FUNC_SEL0);
-			ARM7::out32(IO::GPIO_FUNC_SEL0, (1 << 2*14 | 1 << 2*15) |
+			func_sel = CPU::in32(IO::GPIO_FUNC_SEL0);
+			CPU::out32(IO::GPIO_FUNC_SEL0, (1 << 2*14 | 1 << 2*15) |
 					func_sel);
 		} else {
-			func_sel = ARM7::in32(IO::GPIO_FUNC_SEL1);
-			ARM7::out32(IO::GPIO_FUNC_SEL1, (1 << 2*2 | 1 << 2*3) |
+			func_sel = CPU::in32(IO::GPIO_FUNC_SEL1);
+			CPU::out32(IO::GPIO_FUNC_SEL1, (1 << 2*2 | 1 << 2*3) |
 						func_sel);
 		}
 	}
