@@ -44,7 +44,7 @@ public:
 
         Address(unsigned long a) {
             assert(LENGTH == sizeof(long));
-            a = htonl(a);
+            a = CPU::htonl(a);
             memcpy(this, &a, sizeof(long));
         }
 
