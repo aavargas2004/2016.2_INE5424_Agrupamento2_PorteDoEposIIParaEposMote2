@@ -59,10 +59,10 @@ private:
     static  Transceiver * device;
 };
 
-class  Radio: public CMAC<Radio_Wrapper>, Radio_Common
+class  Radio//: public CMAC<Radio_Wrapper>, Radio_Common
 {
 public:
-     Radio(int unit = 0): CMAC<Radio_Wrapper>(unit) {}
+     Radio(int unit = 0) {}//: CMAC<Radio_Wrapper>(unit) {}
 
     ~Radio() {}
 

@@ -16,7 +16,7 @@
 
 __BEGIN_SYS
 
-class NIC: public Radio_Common
+class NIC//: public Radio_Common
 {
 private:
     typedef Traits<NIC>::NICS NICS;
@@ -24,34 +24,34 @@ private:
 
 public:
     NIC(unsigned int unit = 0) {
-        _dev = new Meta_NIC<NICS>::Get<0>::Result(unit);
+//        _dev = new Meta_NIC<NICS>::Get<0>::Result(unit);
     }
 
     ~NIC() {
-        delete _dev;
+//        delete _dev;
     }
 
-    int send(const Address & dst, const Protocol & prot,
-            const void * data, unsigned int size) {
-        return _dev->send(dst, prot, data, size);
-    }
+//    int send(const Address & dst, const Protocol & prot,
+//            const void * data, unsigned int size) {
+//        return _dev->send(dst, prot, data, size);
+//    }
 
-    int receive(Address * src, Protocol * prot,
-            void * data, unsigned int size) {
-        return _dev->receive(src, prot, data, size);
-    }
+//    int receive(Address * src, Protocol * prot,
+//            void * data, unsigned int size) {
+//       return _dev->receive(src, prot, data, size);
+//    }
 
-    void reset() {_dev->reset();}
+//    void reset() {_dev->reset();}
 
-    unsigned int mtu() const {return _dev->mtu();}
+//    unsigned int mtu() const {return _dev->mtu();}
 
-    const Address & address() {return _dev->address();}
+//    const Address & address() {return _dev->address();}
 
-    const Statistics & statistics() {return _dev->statistics();}
+//    const Statistics & statistics() {return _dev->statistics();}
 
-    void attach(Observer * obs, const Protocol & prot) { _dev->attach(obs, prot); }
-    void detach(Observer * obs, const Protocol & prot) { _dev->detach(obs, prot); }
-    void notify(const Protocol & prot) { _dev->notify(prot); }
+//    void attach(Observer * obs, const Protocol & prot) { _dev->attach(obs, prot); }
+//    void detach(Observer * obs, const Protocol & prot) { _dev->detach(obs, prot); }
+//    void notify(const Protocol & prot) { _dev->notify(prot); }
 
     static void init();
 
@@ -63,30 +63,30 @@ public:
         FULL = 3,
     };
 
-    static OP_Mode power() { return _mode; }
-    static void power(OP_Mode mode)
-    {
-        if(mode == _mode) return;
+//    static OP_Mode power() { return _mode; }
+//    static void power(OP_Mode mode)
+//    {
+//        if(mode == _mode) return;
+//
+//        switch(mode)
+//        {
+//        case FULL:
+//            MC13224V_Buck_Regulator::Radio_1P5V_txrx_enable();
+//            init();
+//            break;
+//        case SEND_ONLY:
+//            break;
+//        case RECV_ONLY:
+//            break;
+//        case OFF:
+//            MC13224V_Buck_Regulator::Radio_1P5V_disable();
+//            break;
+//        }
+//    }
 
-        switch(mode)
-        {
-        case FULL:
-            MC13224V_Buck_Regulator::Radio_1P5V_txrx_enable();
-            init();
-            break;
-        case SEND_ONLY:
-            break;
-        case RECV_ONLY:
-            break;
-        case OFF:
-            MC13224V_Buck_Regulator::Radio_1P5V_disable();
-            break;
-        }
-    }
-
-private:
+public:
     static OP_Mode _mode;
-    Meta_NIC<NICS>::Base * _dev;
+//    Meta_NIC<NICS>::Base * _dev;
 };
 
 __END_SYS
