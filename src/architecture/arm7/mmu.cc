@@ -8,14 +8,14 @@
 
 #include <mmu.h>
 #include <machine.h>
-#include <traits.h>
+#include <system/traits.h>
 
 __BEGIN_SYS
 
 // Class attributes
-ARM7_MMU::List ARM7_MMU::_free;
+MMU::List MMU::_free;
 
-ARM7_MMU::Phy_Addr ARM7_MMU::alloc(unsigned int bytes) {
+MMU::Phy_Addr MMU::alloc(unsigned int bytes) {
     Phy_Addr phy(false);
     if(bytes) {
         List::Element * e = _free.search_decrementing(bytes);
@@ -23,19 +23,19 @@ ARM7_MMU::Phy_Addr ARM7_MMU::alloc(unsigned int bytes) {
 			//phy = e->object() + e->size();
             phy = (unsigned int)e->object() + (unsigned int)e->size();
         else
-            db<ARM7_MMU>(WRN) << "ARM7_MMU::alloc() failed!\n";
+            db<MMU>(WRN) << "MMU::alloc() failed!\n";
     }
-    db<ARM7_MMU>(TRC) << "ARM7_MMU::alloc(bytes=" << bytes << ") => "
+    db<MMU>(TRC) << "MMU::alloc(bytes=" << bytes << ") => "
                       << (void *)phy << "\n";
     return phy;
 }
 
-void ARM7_MMU::free(Phy_Addr addr, int n) {
-    db<ARM7_MMU>(TRC) << "ARM7_MMU::free(addr=" << (void *)addr
+void MMU::free(Phy_Addr addr, int n) {
+    db<MMU>(TRC) << "MMU::free(addr=" << (void *)addr
                       << ",n=" << n << ")\n";
 
 	if(addr % 4 != 0){
-		db<ARM7_MMU>(ERR) << "Unaligned address to be freed!\n";
+		db<MMU>(ERR) << "Unaligned address to be freed!\n";
 		Machine::panic();
 	}
 

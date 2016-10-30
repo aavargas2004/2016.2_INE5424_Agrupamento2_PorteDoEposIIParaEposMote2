@@ -6,20 +6,20 @@
 // http://epos.lisha.ufsc.br/EPOS+Software+License+v1.0
 // Note that EPOS Software License applies to both source code and executables.
 
-#include <arch/arm7/cpu.h>
+#include <architecture/arm7/cpu.h>
 #include <system/config.h>
 #include <machine.h>
 
 __BEGIN_SYS
 
-ARM7::OP_Mode ARM7::_mode = ARM7::FULL;
+CPU::OP_Mode CPU::_mode = CPU::FULL;
 
-void ARM7::Context::save() volatile
+void CPU::Context::save() volatile
 {
 
 }
 
-void ARM7::Context::load() const volatile
+void CPU::Context::load() const volatile
 {
 	db<CPU>(TRC) << "CPU::Context::load(this=" << (void*)this << ")\n";
 
@@ -32,11 +32,11 @@ void ARM7::Context::load() const volatile
 }
 
 
-void ARM7::switch_context(Context * volatile * o, Context * volatile n)
+void CPU::switch_context(Context * volatile * o, Context * volatile n)
 {
     Context * old = *o;
         
-    db<CPU>(TRC) << "ARM7::switch_context(o=" << old <<",n="<<*n<<")\n";
+    db<CPU>(TRC) << "CPU::switch_context(o=" << old <<",n="<<*n<<")\n";
 
     old->_cpsr = CPU::flags();
     
@@ -49,7 +49,7 @@ void ARM7::switch_context(Context * volatile * o, Context * volatile n)
 }
 
 
-void ARM7::power(ARM7::OP_Mode mode)
+void CPU::power(CPU::OP_Mode mode)
 {
     if (mode == _mode) return;
     _mode = mode;

@@ -14,41 +14,41 @@ void _undefined_instruction() __attribute__ ((naked));
 void _undefined_instruction()
 {
     kout << "undefined instruction\n";
-    ASMV("movs pc, r14");
+    ASM("movs pc, r14");
 }
 
 void _software_interrupt() __attribute__ ((naked));
 void _software_interrupt()
 {
     kout << "software interrupt\n";
-    ASMV("movs pc, r14");
+    ASM("movs pc, r14");
 }
 
 void _prefetch_abort() __attribute__ ((naked));
 void _prefetch_abort()
 {
     kout << "prefetch abort\n";
-    ASMV("subs pc, r14, #4");
+    ASM("subs pc, r14, #4");
 }
 
 void _data_abort() __attribute__ ((naked));
 void _data_abort()
 {
     kout << "data abort\n";
-    ASMV("subs pc, r14, #8");
+    ASM("subs pc, r14, #8");
 }
 
 void _reserved() __attribute__ ((naked));
 void _reserved()
 {
     kout << "reserved\n";
-    ASMV("mov pc, r14");
+    ASM("mov pc, r14");
 }
 
 void _irq_handler() __attribute__ ((naked));
 void _irq_handler() {
 
-    ASMV(
+    ASM(
             // A few definitions
             ".equ ARM_MODE_USR,      0x10 \n"
             ".equ ARM_MODE_FIQ,      0x11 \n"
@@ -74,7 +74,7 @@ void _irq_handler() {
             
     );            
     IC::int_handler();
-    ASMV(        
+    ASM(        
             "ldmfd sp!, {r0}              \n"
             "msr spsr_cfxs, r0           \n" // restore IRQ's spsr value to SVC's spsr
 
@@ -86,7 +86,7 @@ void _fiq_handler() __attribute__ ((naked));
 void _fiq_handler()
 {
     kout << "fiq handler\n";
-    ASMV("subs pc, r14, #4");
+    ASM("subs pc, r14, #4");
 }
 
 };

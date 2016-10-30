@@ -45,7 +45,7 @@ protected:
 public:
     typedef unsigned short Count;
 
-    Timer(const Handler* handler, const INSTANCE instance){
+    Timer(Handler* handler, const INSTANCE instance){
 		// 100ms as a default period
 		Timer(10, handler, instance);
     }
