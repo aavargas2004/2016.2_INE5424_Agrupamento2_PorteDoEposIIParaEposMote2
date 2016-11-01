@@ -8,15 +8,15 @@
 
 __BEGIN_SYS
 
-Machine_Timer::Handler* Machine_Timer::handlers[4];
+Timer::Handler* Timer::handlers[4];
 
 __END_SYS
 
 __USING_SYS
 
-void Machine_Timer::handler_wrapper()
+void Timer::handler_wrapper()
 {
-    db<Machine_IC>(TRC) << "Machine_Timer::handler_wrapper\n";
+    db<IC>(TRC) << "Timer::handler_wrapper\n";
     Reg16 r;
     if((r = CPU::in16(IO::TIMER0_CSCTRL)) & 0x0010){
         CPU::out16(IO::TIMER0_CSCTRL, r & ~0x0010);

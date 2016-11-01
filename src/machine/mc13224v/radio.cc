@@ -13,29 +13,29 @@
 
 __BEGIN_SYS
 
-Machine_Transceiver * Radio_Wrapper::device = 0;
+Transceiver * Radio_Wrapper::device = 0;
 
 typedef IO_Map<Machine> IO;
 
 void Radio_Wrapper::init() {
-    device = new(kmalloc(sizeof(Machine_Transceiver))) Machine_Transceiver();
+//    device = new(kmalloc(sizeof(Transceiver))) Transceiver();
 
     CPU::out32(IO::CRM_SYS_CNTL, 0x00000001);
     CPU::out32(IO::CRM_VREG_CNTL, 0x00000f5c);
     for (volatile unsigned int i = 0; i < 0x161a8; i++) { continue; }
 
-    Machine_Transceiver::maca_init();
+    Transceiver::maca_init();
 
     device->set_channel(0); /* 802.15.4 channel 11 */
     device->set_power(0x12); /* 4.5dBm */
 }
 
-void Radio_Wrapper::set_event_handler(Machine_Transceiver::event_handler * handler) {
+void Radio_Wrapper::set_event_handler(Transceiver::event_handler * handler) {
     device->set_event_handler(handler);
 }
 
 int Radio_Wrapper::send(unsigned char * data, unsigned int size) {
-    volatile Machine_Transceiver::packet_t * p;
+    volatile Transceiver::packet_t * p;
 
     do {
         p = device->get_free_packet();
@@ -49,7 +49,7 @@ int Radio_Wrapper::send(unsigned char * data, unsigned int size) {
 }
 
 int Radio_Wrapper::receive(unsigned char * data) {
-    volatile Machine_Transceiver::packet_t * p;
+    volatile Transceiver::packet_t * p;
     do {
         p = device->rx_packet();
     } while (!p);

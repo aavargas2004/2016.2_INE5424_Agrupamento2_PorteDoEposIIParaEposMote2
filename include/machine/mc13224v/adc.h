@@ -29,7 +29,9 @@ protected:
     static const Hertz DEFAULT_FREQUENCY = Traits<Machine>::CLOCK>>9;
     static const int shift = ((unit+1)%2); // 0 for unit 1, and 1 for unit 2
     
-    enum {
+
+public:
+        enum {
 		SINGLE_ENDED_ADC0 = 0,
 		OVERRIDE_ADC_UNIT_ON = 0x100 << shift,
 		OVERRIDE_ADC_OTHER_UNIT_ON = 0x300 >> shift,
@@ -39,7 +41,6 @@ protected:
 		BATTERY_CHANNEL = 8
 	};
 
-public:
 	ADC_Unit(unsigned char channel = SINGLE_ENDED_ADC0, 
 					  Hertz frequency = DEFAULT_FREQUENCY) {
 		// Must aways produce < or = 300000Hz

@@ -7,6 +7,7 @@
 // Note that EPOS Software License applies to both source code and executables.
 
 #include <architecture/arm7/tsc.h>
+#include <machine/mc13224v/config.h>
 //TODO: how to avoid breaking the Arch <=> Mach isolation?
 #include <timer.h>
 

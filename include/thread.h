@@ -10,6 +10,8 @@
 #include <system.h>
 #include <scheduler.h>
 #include <segment.h>
+//scheduler timer 1
+#include "machine/mc13224v/config.h"
 
 extern "C" { void __exit(); }
 
@@ -123,7 +125,8 @@ protected:
         CPU::int_enable();
     }
 
-    static bool locked() { return CPU::int_disabled(); }
+//TODO implementar na CPU do arm7
+//    static bool locked() { return CPU::int_disabled(); }
 
     void suspend(bool locked);
 

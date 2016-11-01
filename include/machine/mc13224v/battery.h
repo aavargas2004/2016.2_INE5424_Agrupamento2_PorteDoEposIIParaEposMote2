@@ -6,6 +6,8 @@
 // http://epos.lisha.ufsc.br/EPOS+Software+License+v1.0
 // Note that EPOS Software License applies to both source code and executables.
 
+
+
 #ifndef __mc13224v_battery_h
 #define __mc13224v_battery_h
 

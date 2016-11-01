@@ -27,7 +27,8 @@ public:
     Serial_Keyboard() {}
 
     static char get() { return Serial_Display::_engine.get(); }
-    static bool ready_to_get() { return Serial_Display::_engine.ready_to_get(); }
+//TODO: 'class EPOS::S::UART' has no member named 'ready_to_get'
+//    static bool ready_to_get() { return Serial_Display::_engine.ready_to_get(); }
 
     static void attach(Observer * obs) { _observed.attach(obs); }
     static void detach(Observer * obs) { _observed.detach(obs); }

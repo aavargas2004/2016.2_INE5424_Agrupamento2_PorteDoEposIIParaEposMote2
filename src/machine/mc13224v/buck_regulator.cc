@@ -14,7 +14,7 @@
 
 __BEGIN_SYS
 
-unsigned int Machine_Buck_Regulator::_vreg = 0x00000f20; // default register values after start-up
+unsigned int Buck_Regulator::_vreg = 0x00000f20; // default register values after start-up
 
 __END_SYS
 
@@ -22,9 +22,9 @@ __USING_SYS
 
 // TODO: No support for external 1.8V regulator have been implemented!
 
-void Machine_Buck_Regulator::enable()
+void Buck_Regulator::enable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::enable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::enable()\n";
 
     crm_vreg_cntl(crm_vreg_cntl() | 0x03); // enable buck - BUCK_EN and BUCK_SYNC_REC_EN bits
     crm_sys_cntl((crm_sys_cntl() & ~0x83) | 0x81); // buck as power source
@@ -32,31 +32,31 @@ void Machine_Buck_Regulator::enable()
     adjust_buck_clock();
 }
 
-void Machine_Buck_Regulator::disable()
+void Buck_Regulator::disable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::disable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::disable()\n";
 
     crm_sys_cntl(crm_sys_cntl() & ~0x03); // supply from Vbatt
     crm_vreg_cntl(crm_vreg_cntl() & ~0x03); // buck disabled
 }
 
-bool Machine_Buck_Regulator::enabled()
+bool Buck_Regulator::enabled()
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::enabled()\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::enabled()\n";
 
     return ((!(crm_vreg_cntl() & 0x04)) && (crm_status() & 0x00020000));
 }
 
-void Machine_Buck_Regulator::SPIF_1P8V_enable()
+void Buck_Regulator::SPIF_1P8V_enable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::SPIF_1P8V_enable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::SPIF_1P8V_enable()\n";
 
     crm_sys_cntl(crm_sys_cntl() | 0x8);
 }
 
-void Machine_Buck_Regulator::SPIF_1P8V_disable()
+void Buck_Regulator::SPIF_1P8V_disable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::SPIF_1P8V_disable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::SPIF_1P8V_disable()\n";
 
     crm_sys_cntl(crm_sys_cntl() & ~0x8);
 }
@@ -85,9 +85,9 @@ void Machine_Buck_Regulator::SPIF_1P8V_disable()
 // called IMMEDIATELY AFTER the system frequency has been changed.
 // According to datasheet, frequency must not be between 13 and 26 MHz and,
 // thus, buck divider must be between 8 and 16.
-void Machine_Buck_Regulator::adjust_buck_clock()
+void Buck_Regulator::adjust_buck_clock()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::adjust_buck_clock()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::adjust_buck_clock()\n";
 
     const unsigned int clock = Traits<Machine>::CLOCK;
     unsigned char div = 0x0f;
@@ -105,9 +105,9 @@ void Machine_Buck_Regulator::adjust_buck_clock()
     crm_vreg_cntl((crm_vreg_cntl() & 0xfffff000) | div);
 }
 
-void Machine_Buck_Regulator::NVM_1P8V_enable()
+void Buck_Regulator::NVM_1P8V_enable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::NVM_1P8V_enable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::NVM_1P8V_enable()\n";
 
     crm_vreg_cntl(crm_vreg_cntl() | 0x80);
     SPIF_1P8V_enable();
@@ -116,23 +116,23 @@ void Machine_Buck_Regulator::NVM_1P8V_enable()
     while(!NVM_1P8V_enabled());
 }
 
-void Machine_Buck_Regulator::NVM_1P8V_disable()
+void Buck_Regulator::NVM_1P8V_disable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::NVM_1P8V_disable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::NVM_1P8V_disable()\n";
 
     crm_vreg_cntl(crm_vreg_cntl() & 0xffffff7f);
 }
 
-bool Machine_Buck_Regulator::NVM_1P8V_enabled()
+bool Buck_Regulator::NVM_1P8V_enabled()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::NVM_1P8V_enabled()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::NVM_1P8V_enabled()\n";
 
     return (crm_status() & 0x00040000);
 }
 
-void Machine_Buck_Regulator::Radio_1P5V_select(Machine_Buck_Regulator::RadioCurrentDrain drain)
+void Buck_Regulator::Radio_1P5V_select(Buck_Regulator::RadioCurrentDrain drain)
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_select()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_select()\n";
 
     crm_vreg_cntl((crm_vreg_cntl() & 0xffffff9f) | drain);
 }
@@ -140,9 +140,9 @@ void Machine_Buck_Regulator::Radio_1P5V_select(Machine_Buck_Regulator::RadioCurr
 // Enabling/Disabling the 1P5V Regulator only works with MCU in IDLE mode, i.e.,
 // when transceiver is not active.
 
-void Machine_Buck_Regulator::Radio_1P5V_txrx_enable()
+void Buck_Regulator::Radio_1P5V_txrx_enable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_txrx_enable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_txrx_enable()\n";
 
     //check if PLL was enabled - MC1322xRM (Rev. 1.4) page 5-55 table 5-25
     if (crm_vreg_cntl() & RADIO_REGULATOR_TXRX_PLL)
@@ -154,53 +154,53 @@ void Machine_Buck_Regulator::Radio_1P5V_txrx_enable()
     while(!Radio_1P5V_enabled()); //wait until turned on
 }
 
-void Machine_Buck_Regulator::Radio_1P5V_txrx_pll_enable()
+void Buck_Regulator::Radio_1P5V_txrx_pll_enable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_txrx_pll_enable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_txrx_pll_enable()\n";
 
     Radio_1P5V_mode(RADIO_REGULATOR_TXRX_PLL);
     while(!Radio_1P5V_enabled()); //wait until turned on
 }
 
-void Machine_Buck_Regulator::Radio_1P5V_disable()
+void Buck_Regulator::Radio_1P5V_disable()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_disable()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_disable()\n";
 
     Radio_1P5V_mode(RADIO_REGULATOR_OFF);
 }
 
-bool Machine_Buck_Regulator::Radio_1P5V_enabled()
+bool Buck_Regulator::Radio_1P5V_enabled()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_enabled()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_enabled()\n";
 
     return (crm_status() & 0x00080000);
 }
 
-bool Machine_Buck_Regulator::Radio_1P5V_txrx_enabled()
+bool Buck_Regulator::Radio_1P5V_txrx_enabled()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_txrx_enabled()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_txrx_enabled()\n";
 
     return (crm_vreg_cntl() & 0x08);
 }
 
-bool Machine_Buck_Regulator::Radio_1P5V_txrx_pll_enabled()
+bool Buck_Regulator::Radio_1P5V_txrx_pll_enabled()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_txrx_pll_enabled()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_txrx_pll_enabled()\n";
 
     return (crm_vreg_cntl() & 0x18);
 }
 
-void Machine_Buck_Regulator::Radio_1P5V_mode(RadioRegulatorMode mode)
+void Buck_Regulator::Radio_1P5V_mode(RadioRegulatorMode mode)
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::Radio_1P5V_mode(" << mode << ")\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::Radio_1P5V_mode(" << mode << ")\n";
 
     crm_vreg_cntl((crm_vreg_cntl() & 0xffffff9f) | mode);
 }
 
 // will cause other regulators to be OFF for up to 1.5 ms
-void Machine_Buck_Regulator::enter_bypass()
+void Buck_Regulator::enter_bypass()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::enter_bypass()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::enter_bypass()\n";
 
     bool nvm  = NVM_1P8V_enabled();
 
@@ -212,9 +212,9 @@ void Machine_Buck_Regulator::enter_bypass()
     if (nvm) NVM_1P8V_enable();
 }
 
-void Machine_Buck_Regulator::leave_bypass()
+void Buck_Regulator::leave_bypass()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::leave_bypass()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::leave_bypass()\n";
 
     if(!is_in_bypass()) return;
 
@@ -234,16 +234,16 @@ void Machine_Buck_Regulator::leave_bypass()
     if (nvm) NVM_1P8V_enable();
 }
 
-bool Machine_Buck_Regulator::is_in_bypass()
+bool Buck_Regulator::is_in_bypass()
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::is_in_bypass()\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::is_in_bypass()\n";
 
     return (((crm_vreg_cntl() & 0x07) == 0x04) && (crm_status() & 0x00020000));
 }
 
-void Machine_Buck_Regulator::VREG_wakeup_reconfigure()
+void Buck_Regulator::VREG_wakeup_reconfigure()
 {
-    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::VREG_wakeup_reconfigure()\n";
+    db<Buck_Regulator>(TRC) << "Buck_Regulator::VREG_wakeup_reconfigure()\n";
 
     crm_vreg_cntl(_vreg);
     if (_vreg & 0x80) // Enabled NVM
@@ -252,59 +252,59 @@ void Machine_Buck_Regulator::VREG_wakeup_reconfigure()
         while(!Radio_1P5V_enabled()); // Needs to stabilize voltage
 }
 
-unsigned int Machine_Buck_Regulator::crm_sys_cntl()
+unsigned int Buck_Regulator::crm_sys_cntl()
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_sys_cntl()\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_sys_cntl()\n";
 
     return CPU::in32(Machine::IO::CRM_SYS_CNTL);
 }
 
-void Machine_Buck_Regulator::crm_sys_cntl(const unsigned int v)
+void Buck_Regulator::crm_sys_cntl(const unsigned int v)
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_sys_cntl()" << v << "\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_sys_cntl()" << v << "\n";
 
     CPU::out32(Machine::IO::CRM_SYS_CNTL, v);
 }
 
-unsigned int Machine_Buck_Regulator::crm_vreg_cntl()
+unsigned int Buck_Regulator::crm_vreg_cntl()
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_vreg_cntl()\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_vreg_cntl()\n";
 
     return CPU::in32(Machine::IO::CRM_VREG_CNTL);
 }
 
-void Machine_Buck_Regulator::crm_vreg_cntl(const unsigned int v)
+void Buck_Regulator::crm_vreg_cntl(const unsigned int v)
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_vreg_cntl()" << v << "\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_vreg_cntl()" << v << "\n";
 
     _vreg = v;
     CPU::out32(Machine::IO::CRM_VREG_CNTL, v);
 }
 
-unsigned int Machine_Buck_Regulator::crm_status()
+unsigned int Buck_Regulator::crm_status()
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_status()\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_status()\n";
 
     return CPU::in32(Machine::IO::CRM_STATUS);
 }
 
-void Machine_Buck_Regulator::crm_status(const unsigned int v)
+void Buck_Regulator::crm_status(const unsigned int v)
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_status()" << v << "\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_status()" << v << "\n";
 
     CPU::out32(Machine::IO::CRM_STATUS, v);
 }
 
-unsigned int Machine_Buck_Regulator::crm_mod_status()
+unsigned int Buck_Regulator::crm_mod_status()
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_mod_status()\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_mod_status()\n";
 
     return CPU::in32(Machine::IO::CRM_MOD_STATUS);
 }
 
-void Machine_Buck_Regulator::crm_mod_status(const unsigned int v)
+void Buck_Regulator::crm_mod_status(const unsigned int v)
 {
-//    db<Machine_Buck_Regulator>(TRC) << "Machine_Buck_Regulator::crm_mod_status()" << v << "\n";
+//    db<Buck_Regulator>(TRC) << "Buck_Regulator::crm_mod_status()" << v << "\n";
 
     CPU::out32(Machine::IO::CRM_MOD_STATUS, v);
 }

@@ -110,6 +110,24 @@ public:
             "orr %0, %0, #0x80\n"
             "msr cpsr_c, %0\n":  "=r"(flags) : : "cc");
 	}
+//TODO usado na Thread lin 128
+//assembly from armv7: 
+   static bool int_disabled() {
+//        bool disabled;
+//        ASM("mrs %0, primask" : "=r"(disabled));
+//        return disabled;
+          return true;
+    }
+
+//TODO usado na Thread 127
+    template<typename ... Tn>
+    static Log_Addr init_user_stack(Log_Addr sp, void (* exit)(), Tn ... an) {
+//        sp -= sizeof(Context);
+//        Context * ctx = new(sp) Context(0, exit);
+//        init_stack_helper(&ctx->_r0, an ...);
+        return sp;
+    }
+
 
     static void fiq_enable() {}
     static void fiq_disable() {}

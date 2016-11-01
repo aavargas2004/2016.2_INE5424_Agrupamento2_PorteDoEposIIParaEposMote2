@@ -12,122 +12,122 @@
 
 __BEGIN_SYS
 
-Machine_Battery * Machine_Battery::system_battery;
+Battery * Battery::system_battery;
 
 __END_SYS
 
 __USING_SYS
 
-Machine_Battery::Machine_Battery()
+Battery::Battery()
  : _adc()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::Machine_Battery()\n";
+    db<Battery>(TRC) << "Battery::Battery()\n";
 }
 
-const unsigned short Machine_Battery::get()
+const unsigned short Battery::get()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::get()\n";
+    db<Battery>(TRC) << "Battery::get()\n";
 
     return _adc.get();
 }
 
-const unsigned short Machine_Battery::sample()
+const unsigned short Battery::sample()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::sample()\n";
+    db<Battery>(TRC) << "Battery::sample()\n";
 
     return read_to_voltage(get());
 }
 
-const unsigned short Machine_Battery::charge()
+const unsigned short Battery::charge()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::charge()\n";
+    db<Battery>(TRC) << "Battery::charge()\n";
 
     return read_to_charge(get());
 }
 
-Machine_Battery & Machine_Battery::sys_batt()
+Battery & Battery::sys_batt()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::sys_batt()\n";
+    db<Battery>(TRC) << "Battery::sys_batt()\n";
 
     return *system_battery;
 }
-const unsigned short Machine_Battery::read_to_voltage(unsigned short value)
+const unsigned short Battery::read_to_voltage(unsigned short value)
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::read_to_voltage(" << value << ")\n";
+    db<Battery>(TRC) << "Battery::read_to_voltage(" << value << ")\n";
 
     if(value <= 0u) return 0;
 
     return (battery_reference * adc_max) / value;
 }
 
-const unsigned short Machine_Battery::read_to_charge(unsigned short value)
+const unsigned short Battery::read_to_charge(unsigned short value)
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::read_to_charge(" << value << ")\n";
+    db<Battery>(TRC) << "Battery::read_to_charge(" << value << ")\n";
 
     //"Dummy" linear model
     return 100 - (100 * (value - ADC_3p3v) / (ADC_1p8v - ADC_3p3v));
 }
 
-void Machine_Battery::check_buck()
+void Battery::check_buck()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::check_buck()\n";
+    db<Battery>(TRC) << "Battery::check_buck()\n";
 
     check_buck(get());
 }
 
 /* A future implementation should use ADCs threshold feature to avoid pooling of the battery voltage */
-void Machine_Battery::check_buck(unsigned short read)
+void Battery::check_buck(unsigned short read)
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::check_buck(" << read << ")\n";
+    db<Battery>(TRC) << "Battery::check_buck(" << read << ")\n";
 
-    if((read > buck_disable_adc_threshold) && (!Machine_Buck_Regulator::is_in_bypass()))
+    if((read > buck_disable_adc_threshold) && (!Buck_Regulator::is_in_bypass()))
     {
-        Machine_Buck_Regulator::enter_bypass();
+        Buck_Regulator::enter_bypass();
     }
-    else if((read < buck_enable_adc_threshold) && (Machine_Buck_Regulator::is_in_bypass()))
+    else if((read < buck_enable_adc_threshold) && (Buck_Regulator::is_in_bypass()))
     {
-        Machine_Buck_Regulator::leave_bypass();
+        Buck_Regulator::leave_bypass();
     }
 }
 
-const void Machine_Battery::battery_over_threshold_set(unsigned short value)
+const void Battery::battery_over_threshold_set(unsigned short value)
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::battery_over_threshold_set(" << value << ")\n";
+    db<Battery>(TRC) << "Battery::battery_over_threshold_set(" << value << ")\n";
 
     // TODO: set 0x0200 in ?
 }
 
-const void Machine_Battery::battery_over_threshold_enable()
+const void Battery::battery_over_threshold_enable()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::battery_over_threshold_enable()\n";
+    db<Battery>(TRC) << "Battery::battery_over_threshold_enable()\n";
 
     // TODO: set 0x0200 in ?
 }
 
-const void Machine_Battery::battery_over_threshold_disable()
+const void Battery::battery_over_threshold_disable()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::battery_over_threshold_disable()\n";
+    db<Battery>(TRC) << "Battery::battery_over_threshold_disable()\n";
 
     // TODO: clear 0x0200 in ?
 }
 
-const void Machine_Battery::battery_under_threshold_set(unsigned short value)
+const void Battery::battery_under_threshold_set(unsigned short value)
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::battery_under_threshold_set(" << value << ")\n";
+    db<Battery>(TRC) << "Battery::battery_under_threshold_set(" << value << ")\n";
 
     // TODO: clear 0x0200 in ?
 }
 
-const void Machine_Battery::battery_under_threshold_enable()
+const void Battery::battery_under_threshold_enable()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::battery_under_threshold_enable()\n";
+    db<Battery>(TRC) << "Battery::battery_under_threshold_enable()\n";
 
     // TODO: set 0x0100 in ?
 }
 
-const void Machine_Battery::battery_under_threshold_disable()
+const void Battery::battery_under_threshold_disable()
 {
-    db<Machine_Battery>(TRC) << "Machine_Battery::battery_under_threshold_disable()\n";
+    db<Battery>(TRC) << "Battery::battery_under_threshold_disable()\n";
 
     // TODO: clear 0x0100 in ?
 }

@@ -13,64 +13,64 @@
 
 __BEGIN_SYS
 
-volatile bool Machine_Transceiver::cca_result = false;
+volatile bool Transceiver::cca_result = false;
 
-Machine_Transceiver::get_lqi_func Machine_Transceiver::get_lqi = reinterpret_cast<get_lqi_func>(reinterpret_cast<void *>(GET_LQI_ADDR));
+Transceiver::get_lqi_func Transceiver::get_lqi = reinterpret_cast<get_lqi_func>(reinterpret_cast<void *>(GET_LQI_ADDR));
 
-Machine_Transceiver::event_handler * Machine_Transceiver::handler = 0;
+Transceiver::event_handler * Transceiver::handler = 0;
 
-volatile unsigned char Machine_Transceiver::fcs_mode = Machine_Transceiver::USE_FCS;
+volatile unsigned char Transceiver::fcs_mode = Transceiver::USE_FCS;
 
-volatile Machine_Transceiver::packet_t Machine_Transceiver::packet_pool[NUM_PACKETS];
-volatile Machine_Transceiver::packet_t *Machine_Transceiver::free_head, *Machine_Transceiver::rx_end, *Machine_Transceiver::tx_end, *Machine_Transceiver::dma_tx, *Machine_Transceiver::dma_rx;
+volatile Transceiver::packet_t Transceiver::packet_pool[NUM_PACKETS];
+volatile Transceiver::packet_t *Transceiver::free_head, *Transceiver::rx_end, *Transceiver::tx_end, *Transceiver::dma_tx, *Transceiver::dma_rx;
 
-volatile Machine_Transceiver::packet_t *Machine_Transceiver::rx_head;
-volatile Machine_Transceiver::packet_t *Machine_Transceiver::tx_head;
+volatile Transceiver::packet_t *Transceiver::rx_head;
+volatile Transceiver::packet_t *Transceiver::tx_head;
 
 // used for ack recpetion if the packet_pool goes empty
 // doesn't go back into the pool when freed
-volatile Machine_Transceiver::packet_t Machine_Transceiver::dummy_ack;
+volatile Transceiver::packet_t Transceiver::dummy_ack;
 
-volatile unsigned char Machine_Transceiver::current_action = SEQ_NOP;
+volatile unsigned char Transceiver::current_action = SEQ_NOP;
 
-unsigned char Machine_Transceiver::ram_values[4];
+unsigned char Transceiver::ram_values[4];
 
-const unsigned int Machine_Transceiver::addr_seq2[MAX_SEQ2] = {0x8000a050,0x8000a054};
-const unsigned int Machine_Transceiver::data_seq2[MAX_SEQ2] = {0x0000047b,0x0000007b};
+const unsigned int Transceiver::addr_seq2[MAX_SEQ2] = {0x8000a050,0x8000a054};
+const unsigned int Transceiver::data_seq2[MAX_SEQ2] = {0x0000047b,0x0000007b};
 
-const unsigned int Machine_Transceiver::addr_cal3_seq1[MAX_CAL3_SEQ1] = {0x80009400,0x80009a04,0x80009a00};
-const unsigned int Machine_Transceiver::data_cal3_seq1[MAX_CAL3_SEQ1] = {0x00020017,0x8185a0a4,0x8c900025};
+const unsigned int Transceiver::addr_cal3_seq1[MAX_CAL3_SEQ1] = {0x80009400,0x80009a04,0x80009a00};
+const unsigned int Transceiver::data_cal3_seq1[MAX_CAL3_SEQ1] = {0x00020017,0x8185a0a4,0x8c900025};
 
-const unsigned int Machine_Transceiver::addr_cal3_seq2[MAX_CAL3_SEQ2] = {0x80009a00,0x80009a00};
-const unsigned int Machine_Transceiver::data_cal3_seq2[MAX_CAL3_SEQ2] = {0x8c900021,0x8c900027};
+const unsigned int Transceiver::addr_cal3_seq2[MAX_CAL3_SEQ2] = {0x80009a00,0x80009a00};
+const unsigned int Transceiver::data_cal3_seq2[MAX_CAL3_SEQ2] = {0x8c900021,0x8c900027};
 
-const unsigned int Machine_Transceiver::addr_cal3_seq3[MAX_CAL3_SEQ3] = {0x80009a00};
-const unsigned int Machine_Transceiver::data_cal3_seq3[MAX_CAL3_SEQ3] = {0x8c900000};
+const unsigned int Transceiver::addr_cal3_seq3[MAX_CAL3_SEQ3] = {0x80009a00};
+const unsigned int Transceiver::data_cal3_seq3[MAX_CAL3_SEQ3] = {0x8c900000};
 
-const unsigned int Machine_Transceiver::addr_cal5[MAX_CAL5] = {0x80009400,0x8000a050,0x8000a054};
-const unsigned int Machine_Transceiver::data_cal5[MAX_CAL5] = {0x00000017,0x00000000,0x00000000};
+const unsigned int Transceiver::addr_cal5[MAX_CAL5] = {0x80009400,0x8000a050,0x8000a054};
+const unsigned int Transceiver::data_cal5[MAX_CAL5] = {0x00000017,0x00000000,0x00000000};
 
-const unsigned int Machine_Transceiver::addr_reg_rep[MAX_DATA] = {0x80004118,0x80009204,0x80009208,0x8000920c,0x80009210,0x80009300,0x80009304,0x80009308,0x8000930c,0x80009310,0x80009314,0x80009318,0x80009380,0x80009384,0x80009388,0x8000938c,0x80009390,0x80009394,0x8000a008,0x8000a018,0x8000a01c,0x80009424,0x80009434,0x80009438,0x8000943c,0x80009440,0x80009444,0x80009448,0x8000944c,0x80009450,0x80009460,0x80009464,0x8000947c,0x800094e0,0x800094e4,0x800094e8,0x800094ec,0x800094f0,0x800094f4,0x800094f8,0x80009470,0x8000981c,0x80009828};
-const unsigned int Machine_Transceiver::data_reg_rep[MAX_DATA] = {0x00180012,0x00000605,0x00000504,0x00001111,0x0fc40000,0x20046000,0x4005580c,0x40075801,0x4005d801,0x5a45d800,0x4a45d800,0x40044000,0x00106000,0x00083806,0x00093807,0x0009b804,0x000db800,0x00093802,0x00000015,0x00000002,0x0000000f,0x0000aaa0,0x01002020,0x016800fe,0x8e578248,0x000000dd,0x00000946,0x0000035a,0x00100010,0x00000515,0x00397feb,0x00180358,0x00000455,0x00000001,0x00020003,0x00040014,0x00240034,0x00440144,0x02440344,0x04440544,0x0ee7fc00,0x00000082,0x0000002a};
+const unsigned int Transceiver::addr_reg_rep[MAX_DATA] = {0x80004118,0x80009204,0x80009208,0x8000920c,0x80009210,0x80009300,0x80009304,0x80009308,0x8000930c,0x80009310,0x80009314,0x80009318,0x80009380,0x80009384,0x80009388,0x8000938c,0x80009390,0x80009394,0x8000a008,0x8000a018,0x8000a01c,0x80009424,0x80009434,0x80009438,0x8000943c,0x80009440,0x80009444,0x80009448,0x8000944c,0x80009450,0x80009460,0x80009464,0x8000947c,0x800094e0,0x800094e4,0x800094e8,0x800094ec,0x800094f0,0x800094f4,0x800094f8,0x80009470,0x8000981c,0x80009828};
+const unsigned int Transceiver::data_reg_rep[MAX_DATA] = {0x00180012,0x00000605,0x00000504,0x00001111,0x0fc40000,0x20046000,0x4005580c,0x40075801,0x4005d801,0x5a45d800,0x4a45d800,0x40044000,0x00106000,0x00083806,0x00093807,0x0009b804,0x000db800,0x00093802,0x00000015,0x00000002,0x0000000f,0x0000aaa0,0x01002020,0x016800fe,0x8e578248,0x000000dd,0x00000946,0x0000035a,0x00100010,0x00000515,0x00397feb,0x00180358,0x00000455,0x00000001,0x00020003,0x00040014,0x00240034,0x00440144,0x02440344,0x04440544,0x0ee7fc00,0x00000082,0x0000002a};
 
 unsigned char ctov[16] = {0x0b,0x0b,0x0b,0x0a,0x0d,0x0d,0x0c,0x0c,0x0f,0x0e,0x0e,0x0e,0x11,0x10,0x10,0x0f};
 
-const unsigned int Machine_Transceiver::PSMVAL[19] = {0x0000080f,0x0000080f,0x0000080f,0x0000080f,0x0000081f,0x0000081f,0x0000081f,0x0000080f,0x0000080f,0x0000080f,0x0000001f,0x0000000f,0x0000000f,0x00000816,0x0000001b,0x0000000b,0x00000802,0x00000817,0x00000003};
-const unsigned int Machine_Transceiver::PAVAL[19]  = {0x000022c0,0x000022c0,0x000022c0,0x00002280,0x00002303,0x000023c0,0x00002880,0x000029f0,0x000029f0,0x000029f0,0x000029c0,0x00002bf0,0x000029f0,0x000028a0,0x00002800,0x00002ac0,0x00002880,0x00002a00,0x00002b00};
-const unsigned int Machine_Transceiver::AIMVAL[19] = {0x000123a0,0x000163a0,0x0001a3a0,0x0001e3a0,0x000223a0,0x000263a0,0x0002a3a0,0x0002e3a0,0x000323a0,0x000363a0,0x0003a3a0,0x0003a3a0,0x0003e3a0,0x000423a0,0x000523a0,0x000423a0,0x0004e3a0,0x0004e3a0,0x0004e3a0};
+const unsigned int Transceiver::PSMVAL[19] = {0x0000080f,0x0000080f,0x0000080f,0x0000080f,0x0000081f,0x0000081f,0x0000081f,0x0000080f,0x0000080f,0x0000080f,0x0000001f,0x0000000f,0x0000000f,0x00000816,0x0000001b,0x0000000b,0x00000802,0x00000817,0x00000003};
+const unsigned int Transceiver::PAVAL[19]  = {0x000022c0,0x000022c0,0x000022c0,0x00002280,0x00002303,0x000023c0,0x00002880,0x000029f0,0x000029f0,0x000029f0,0x000029c0,0x00002bf0,0x000029f0,0x000028a0,0x00002800,0x00002ac0,0x00002880,0x00002a00,0x00002b00};
+const unsigned int Transceiver::AIMVAL[19] = {0x000123a0,0x000163a0,0x0001a3a0,0x0001e3a0,0x000223a0,0x000263a0,0x0002a3a0,0x0002e3a0,0x000323a0,0x000363a0,0x0003a3a0,0x0003a3a0,0x0003e3a0,0x000423a0,0x000523a0,0x000423a0,0x0004e3a0,0x0004e3a0,0x0004e3a0};
 
-const unsigned char Machine_Transceiver::VCODivI[16] = {0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x30,0x30,0x30,0x30,0x30,0x30,0x30};
-const unsigned int Machine_Transceiver::VCODivF[16]  = {0x00355555,0x006aaaaa,0x00a00000,0x00d55555,0x010aaaaa,0x01400000,0x01755555,0x01aaaaaa,0x01e00000,0x00155555,0x004aaaaa,0x00800000,0x00b55555,0x00eaaaaa,0x01200000,0x01555555};
+const unsigned char Transceiver::VCODivI[16] = {0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x2f,0x30,0x30,0x30,0x30,0x30,0x30,0x30};
+const unsigned int Transceiver::VCODivF[16]  = {0x00355555,0x006aaaaa,0x00a00000,0x00d55555,0x010aaaaa,0x01400000,0x01755555,0x01aaaaaa,0x01e00000,0x00155555,0x004aaaaa,0x00800000,0x00b55555,0x00eaaaaa,0x01200000,0x01555555};
 
-void Machine_Transceiver::set_event_handler(event_handler * ev_handler) {
+void Transceiver::set_event_handler(event_handler * ev_handler) {
     handler = ev_handler;
 }
 
-Machine_Transceiver::event_handler * Machine_Transceiver::get_event_handler() {
+Transceiver::event_handler * Transceiver::get_event_handler() {
     return handler;
 }
 
-bool Machine_Transceiver::cca_measurement() {
+bool Transceiver::cca_measurement() {
     current_action = SEQ_CCA;
 
     CPU::out32(IO::MACA_CONTROL, 
@@ -84,7 +84,7 @@ bool Machine_Transceiver::cca_measurement() {
     return cca_result;
 }
 
-void Machine_Transceiver::maca_init() {
+void Transceiver::maca_init() {
     reset_maca();
 
     radio_init();
@@ -113,7 +113,7 @@ void Machine_Transceiver::maca_init() {
     IC::enable(IC::IRQ_MACA);
 }
 
-void Machine_Transceiver::free_packet(volatile packet_t *p) {
+void Transceiver::free_packet(volatile packet_t *p) {
     IC::disable(IC::IRQ_MACA);
 
     if (!p)
@@ -131,7 +131,7 @@ void Machine_Transceiver::free_packet(volatile packet_t *p) {
     IC::enable(IC::IRQ_MACA);
 }
 
-volatile Machine_Transceiver::packet_t* Machine_Transceiver::get_free_packet() {
+volatile Transceiver::packet_t* Transceiver::get_free_packet() {
     volatile packet_t *p;
 
     IC::disable(IC::IRQ_MACA);
@@ -147,7 +147,7 @@ volatile Machine_Transceiver::packet_t* Machine_Transceiver::get_free_packet() {
     return p;
 }
 
-void Machine_Transceiver::post_receive() {
+void Transceiver::post_receive() {
     ResumeMACASync();
 
     IC::disable(IC::IRQ_MACA);
@@ -162,7 +162,7 @@ void Machine_Transceiver::post_receive() {
         dma_rx = get_free_packet();
 
         if (dma_rx == 0) {
-            db<Machine_Transceiver>(ERR) << "Machine_Transceiver::post_receive() - Trying to fill MACA_DMARX but out of packet buffers\n";
+            db<Transceiver>(ERR) << "Transceiver::post_receive() - Trying to fill MACA_DMARX but out of packet buffers\n";
             // set the sftclock so that we return to the maca_isr
             CPU::out32(IO::MACA_SFTCLK, CPU::in32(IO::MACA_CLK) + RECV_SOFTIMEOUT); // soft timeout
             CPU::out32(IO::MACA_TMREN, (1 << TMREN_SFT));
@@ -187,7 +187,7 @@ void Machine_Transceiver::post_receive() {
     IC::enable(IC::IRQ_MACA);
 }
 
-volatile Machine_Transceiver::packet_t* Machine_Transceiver::rx_packet() {
+volatile Transceiver::packet_t* Transceiver::rx_packet() {
     volatile packet_t *p;
 
     IC::disable(IC::IRQ_MACA);
@@ -204,7 +204,7 @@ volatile Machine_Transceiver::packet_t* Machine_Transceiver::rx_packet() {
     return p;
 }
 
-void Machine_Transceiver::post_tx() {
+void Transceiver::post_tx() {
     ResumeMACASync();
 
     IC::disable(IC::IRQ_MACA);
@@ -223,7 +223,7 @@ void Machine_Transceiver::post_tx() {
 
         if (dma_rx == 0) {
             dma_rx = &dummy_ack;
-            db<Machine_Transceiver>(ERR) << "Machine_Transceiver::post_tx() - Trying to fill MACA_DMARX but out of packet buffers\n";
+            db<Transceiver>(ERR) << "Transceiver::post_tx() - Trying to fill MACA_DMARX but out of packet buffers\n";
         }
     }
 
@@ -242,7 +242,7 @@ void Machine_Transceiver::post_tx() {
     while (current_action == SEQ_TX);
 }
 
-void Machine_Transceiver::fill_packet(volatile packet_t *p, unsigned char * data, unsigned int size) {
+void Transceiver::fill_packet(volatile packet_t *p, unsigned char * data, unsigned int size) {
     p->length = size;
     p->offset = 0;
 
@@ -250,7 +250,7 @@ void Machine_Transceiver::fill_packet(volatile packet_t *p, unsigned char * data
         p->data[i] = data[i];
 }
 
-void Machine_Transceiver::tx_packet(volatile packet_t *p) {
+void Transceiver::tx_packet(volatile packet_t *p) {
     IC::disable(IC::IRQ_MACA);
 
     if (!p)
@@ -275,7 +275,7 @@ void Machine_Transceiver::tx_packet(volatile packet_t *p) {
     IC::enable(IC::IRQ_MACA);
 }
 
-void Machine_Transceiver::free_all_packets() {
+void Transceiver::free_all_packets() {
     volatile unsigned int i;
 
     IC::disable(IC::IRQ_MACA);
@@ -295,7 +295,7 @@ void Machine_Transceiver::free_all_packets() {
 }
 
 // private routines used by driver
-void Machine_Transceiver::free_tx_head() {
+void Transceiver::free_tx_head() {
     volatile packet_t *p;
 
     IC::disable(IC::IRQ_MACA);
@@ -311,7 +311,7 @@ void Machine_Transceiver::free_tx_head() {
     IC::enable(IC::IRQ_MACA);
 }
 
-void Machine_Transceiver::add_to_rx(volatile packet_t *p) {
+void Transceiver::add_to_rx(volatile packet_t *p) {
     IC::disable(IC::IRQ_MACA);
 
     if (!p)
@@ -336,7 +336,7 @@ void Machine_Transceiver::add_to_rx(volatile packet_t *p) {
     IC::enable(IC::IRQ_MACA);
 }
 
-void Machine_Transceiver::maca_isr() {
+void Transceiver::maca_isr() {
     CPU::out32(IO::ITC_INTFRC, 0); // stop forcing interrupts
 
     IC::disable(IC::IRQ_MACA);
@@ -399,7 +399,7 @@ void Machine_Transceiver::maca_isr() {
     IC::enable(IC::IRQ_MACA);
 }
 
-void Machine_Transceiver::init_phy() {
+void Transceiver::init_phy() {
     CPU::out32(IO::MACA_CLKDIV,     MACA_CLOCK_DIV);
     CPU::out32(IO::MACA_WARMUP,     0x00180012);
     CPU::out32(IO::MACA_EOFDELAY,   0x00000004);
@@ -420,7 +420,7 @@ void Machine_Transceiver::init_phy() {
     CPU::out32(IO::MACA_SLOTOFFSET, 0x00350000);
 }
 
-void Machine_Transceiver::reset_maca() {
+void Transceiver::reset_maca() {
     volatile unsigned int cnt;
 
     CPU::out32(IO::MACA_RESET, (1 << RESET_RST));
@@ -437,7 +437,7 @@ void Machine_Transceiver::reset_maca() {
     CPU::out32(IO::MACA_CLRIRQ, 0xffff);
 }
 
-void Machine_Transceiver::flyback_init() {
+void Transceiver::flyback_init() {
     unsigned int val8, aux;
 
     val8 = *(volatile unsigned int *)(RF_BASE+8);
@@ -448,7 +448,7 @@ void Machine_Transceiver::flyback_init() {
     *(volatile unsigned int *)(RF_BASE)      = 16;
 }
 
-void Machine_Transceiver::maca_off() {
+void Transceiver::maca_off() {
     IC::disable(IC::IRQ_MACA);
     // turn off the radio regulators
     CPU::out32(0x80003048, 0x00000f00);
@@ -456,7 +456,7 @@ void Machine_Transceiver::maca_off() {
     CPU::out32(IO::MACA_RESET, RESET_RST);
 }
 
-void Machine_Transceiver::maca_on() {
+void Transceiver::maca_on() {
     // turn the radio regulators back on
     CPU::out32(0x80003048, 0x00000f78);
     // reinitialize the phy
@@ -466,7 +466,7 @@ void Machine_Transceiver::maca_on() {
     IC::enable(IC::IRQ_MACA);
 }
 
-unsigned char Machine_Transceiver::get_ctov(unsigned int r0, unsigned int r1) {
+unsigned char Transceiver::get_ctov(unsigned int r0, unsigned int r1) {
     r0 = r0 * INIT_CTOV_WORD_1;
     r0 += (r1 << 22);
     r0 += INIT_CTOV_WORD_2;
@@ -476,7 +476,7 @@ unsigned char Machine_Transceiver::get_ctov(unsigned int r0, unsigned int r1) {
     return (unsigned char)r0;
 }
 
-void Machine_Transceiver::radio_init() {
+void Transceiver::radio_init() {
     volatile unsigned int i;
     // sequence 1
     *(volatile unsigned int *)(0x8000304c) = 0x00607707;
@@ -523,7 +523,7 @@ void Machine_Transceiver::radio_init() {
         ctov[i] = get_ctov(i,ram_values[3]);
 }
 
-void Machine_Transceiver::set_demodulator_type(unsigned char demod) {
+void Transceiver::set_demodulator_type(unsigned char demod) {
     unsigned int val = CPU::in32(RF_REG);
     if (demod == DEMOD_NCD)
         val = (val & ~1);
@@ -533,7 +533,7 @@ void Machine_Transceiver::set_demodulator_type(unsigned char demod) {
     CPU::out32(RF_REG, val);
 }
 
-void Machine_Transceiver::set_power(unsigned char power) {
+void Transceiver::set_power(unsigned char power) {
     IC::disable(IC::IRQ_MACA);
 
     CPU::out32(ADDR_POW1, PSMVAL[power]);
@@ -546,7 +546,7 @@ void Machine_Transceiver::set_power(unsigned char power) {
     IC::enable(IC::IRQ_MACA);
 }
 
-void Machine_Transceiver::set_channel(unsigned char chan) {
+void Transceiver::set_channel(unsigned char chan) {
     volatile unsigned int tmp;
     IC::disable(IC::IRQ_MACA);
 
@@ -576,7 +576,7 @@ void Machine_Transceiver::set_channel(unsigned char chan) {
  * Processes up to 4 words of initialization entries.
  * Returns the number of words processed.
  */
-unsigned int Machine_Transceiver::exec_init_entry(volatile unsigned int *entries, unsigned char *valbuf) {
+unsigned int Transceiver::exec_init_entry(volatile unsigned int *entries, unsigned char *valbuf) {
     volatile unsigned int i;
 
     if (entries[0] <= ROM_END) {
@@ -615,27 +615,27 @@ unsigned int Machine_Transceiver::exec_init_entry(volatile unsigned int *entries
     }
 }
 
-unsigned int Machine_Transceiver::init_from_flash(unsigned int addr) {
-    Machine_Flash::nvmType_t type = Machine_Flash::gNvmType_NoNvm_c;
-    Machine_Flash::nvmErr_t err;
+unsigned int Transceiver::init_from_flash(unsigned int addr) {
+    Flash::nvmType_t type = Flash::gNvmType_NoNvm_c;
+    Flash::nvmErr_t err;
     volatile unsigned int buf[8];
     volatile unsigned int len;
     volatile unsigned int i = 0;
 
-    Machine_Buck_Regulator::NVM_1P8V_enable();
+    Buck_Regulator::NVM_1P8V_enable();
 
-    err = Machine_Flash::nvm_detect(Machine_Flash::gNvmInternalInterface_c, &type);
+    err = Flash::nvm_detect(Flash::gNvmInternalInterface_c, &type);
 
-    Machine_Flash::nvm_setsvar(0);
+    Flash::nvm_setsvar(0);
 
-    err = Machine_Flash::nvm_read(Machine_Flash::gNvmInternalInterface_c, type, (unsigned char *)buf, addr, 8);
+    err = Flash::nvm_read(Flash::gNvmInternalInterface_c, type, (unsigned char *)buf, addr, 8);
     i += 8;
 
     if (buf[0] == FLASH_INIT_MAGIC) {
         len = buf[1] & 0x0000ffff;
 
         while (i < (len - 4)) {
-            err = Machine_Flash::nvm_read(Machine_Flash::gNvmInternalInterface_c, type, (unsigned char *) buf, addr + i, 32);
+            err = Flash::nvm_read(Flash::gNvmInternalInterface_c, type, (unsigned char *) buf, addr + i, 32);
 
             i += 4 * exec_init_entry(buf, ram_values);
         }
@@ -650,7 +650,7 @@ unsigned int Machine_Transceiver::init_from_flash(unsigned int addr) {
  * Do the ABORT-Wait-NOP-Wait sequence in order to prevent MACA malfunctioning.
  * This sequence is synchronous and no interrupts should be triggered when it is done.
  */
-void Machine_Transceiver::ResumeMACASync() {
+void Transceiver::ResumeMACASync() {
     volatile unsigned int clk, TsmRxSteps, LastWarmupStep, LastWarmupData, LastWarmdownStep, LastWarmdownData;
     volatile unsigned int i;
     IC::disable(IC::IRQ_MACA);
