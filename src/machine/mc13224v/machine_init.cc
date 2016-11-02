@@ -18,11 +18,11 @@ void Machine::init()
     if (Traits<Machine>::flash_erase_checking)
         check_flash_erase();
 
-    if (Traits<Machine_Battery>::enabled)
-        Machine_Battery::init();
+    if (Traits<Battery>::enabled)
+        Battery::init();
 
-    if (Traits<Machine_NIC>::enabled)
-		Machine_NIC::init();
+    if (Traits<NIC>::enabled)
+	NIC::init();
 }
 
 __END_SYS

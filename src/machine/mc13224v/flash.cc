@@ -11,15 +11,15 @@
 
 __BEGIN_SYS
 
-Machine_Flash::nvm_detect_func Machine_Flash::nvm_detect = reinterpret_cast<nvm_detect_func>(reinterpret_cast<void *>(NVM_DETECT_ADDR));
+Flash::nvm_detect_func Flash::nvm_detect = reinterpret_cast<nvm_detect_func>(reinterpret_cast<void *>(NVM_DETECT_ADDR));
 
-Machine_Flash::nvm_read_func Machine_Flash::nvm_read = reinterpret_cast<nvm_read_func>(reinterpret_cast<void *>(NVM_READ_ADDR));
+Flash::nvm_read_func Flash::nvm_read = reinterpret_cast<nvm_read_func>(reinterpret_cast<void *>(NVM_READ_ADDR));
 
-Machine_Flash::nvm_setsvar_func Machine_Flash::nvm_setsvar = reinterpret_cast<nvm_setsvar_func>(reinterpret_cast<void *>(NVM_SETSVAR_ADDR));
+Flash::nvm_setsvar_func Flash::nvm_setsvar = reinterpret_cast<nvm_setsvar_func>(reinterpret_cast<void *>(NVM_SETSVAR_ADDR));
 
-Machine_Flash::nvm_erase_func Machine_Flash::nvm_erase = reinterpret_cast<nvm_erase_func>(reinterpret_cast<void *>(NVM_ERASE_ADDR));
+Flash::nvm_erase_func Flash::nvm_erase = reinterpret_cast<nvm_erase_func>(reinterpret_cast<void *>(NVM_ERASE_ADDR));
 
-Machine_Flash::crm_set_spif_voltage_level_func Machine_Flash::CRM_SetSPIFVoltageLevel = reinterpret_cast<crm_set_spif_voltage_level_func>(reinterpret_cast<void *>(CRM_SET_SPIF_VOLTAGE_LEVEL_ADDR));
+Flash::crm_set_spif_voltage_level_func Flash::CRM_SetSPIFVoltageLevel = reinterpret_cast<crm_set_spif_voltage_level_func>(reinterpret_cast<void *>(CRM_SET_SPIF_VOLTAGE_LEVEL_ADDR));
 
 __END_SYS
 

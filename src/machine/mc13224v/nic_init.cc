@@ -14,18 +14,18 @@ __BEGIN_SYS
 template <int unit>
 inline static void call_init()
 {
-    typedef typename Traits<Machine_NIC>::NICS::template Get<unit>::Result NIC;
+    typedef typename Traits<NIC>::NICS::template Get<unit>::Result NIC;
     if(Traits<NIC>::enabled)
         NIC::init(unit);
     call_init<unit + 1>();
 };
 
 template <> 
-inline void call_init<Traits<Machine_NIC>::NICS::Length>()
+inline void call_init<Traits<NIC>::NICS::Length>()
 {
 };
 
-void Machine_NIC::init()
+void NIC::init()
 {
     call_init<0>();
 }

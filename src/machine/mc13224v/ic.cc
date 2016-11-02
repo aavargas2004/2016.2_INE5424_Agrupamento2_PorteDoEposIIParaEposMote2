@@ -13,32 +13,32 @@
 
 __BEGIN_SYS
 
-Machine_IC::Interrupt_Handler Machine_IC::vector[11];
+IC::Interrupt_Handler IC::vector[11];
 
-void Machine_IC::int_handler() {
+void IC::int_handler() {
     CPU::Reg16 pending = CPU::in16(IO_Map<Machine>::ITC_NIPEND);
     
-    db<Machine_IC> (TRC) << "Machine_IC::int_handler(" << (int)pending << ")\n";
+    db<IC> (TRC) << "IC::int_handler(" << (int)pending << ")\n";
 
     if((1 << IRQ_TIMER) & pending)
     {
-        db<Machine_IC> (INF) << "Interrupt! IRQ_TIMER\n";
+        db<IC> (INF) << "Interrupt! IRQ_TIMER\n";
         vector[IRQ_TIMER]();
     } else if((1 << IRQ_UART1) & pending)
     {
-        db<Machine_IC> (INF) << "Interrupt! IRQ_UART1\n";
+        db<IC> (INF) << "Interrupt! IRQ_UART1\n";
         vector[IRQ_UART1]();
     } else if((1 << IRQ_UART2) & pending)
     {
-        db<Machine_IC> (INF) << "Interrupt! IRQ_UART2\n";
+        db<IC> (INF) << "Interrupt! IRQ_UART2\n";
         vector[IRQ_UART2]();
     } else if((1 << IRQ_MACA) & pending)
     {
-        db<Machine_IC> (INF) << "Interrupt! IRQ_MACA\n";
+        db<IC> (INF) << "Interrupt! IRQ_MACA\n";
         vector[IRQ_MACA]();
     } else
     {
-        db<Machine_IC> (INF) << "Unexpected Interrupt! => " << (unsigned int)pending << "\n";
+        db<IC> (INF) << "Unexpected Interrupt! => " << (unsigned int)pending << "\n";
 //        Machine::panic();
     }
 }

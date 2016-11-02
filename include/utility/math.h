@@ -7,6 +7,8 @@
 
 __BEGIN_UTIL
 
+namespace Math {
+
 static const float E = 2.71828183;
 
 template <typename T>
@@ -155,6 +157,8 @@ T variance(const T array[], int size, const T & mean)
     }
     return var / (size - 1);
 }
+
+};
 
 __END_UTIL
 

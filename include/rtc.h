@@ -10,22 +10,25 @@ __BEGIN_SYS
 
 class RTC_Common
 {
-private:
-    static const unsigned long MAX_LONG = (unsigned long)(-1);
-    static const unsigned long long MAX_LONG_LONG = (unsigned long long)(-1);
+//private:
+//    static const unsigned long MAX_LONG = (unsigned long)(-1);
+//    static const unsigned long long MAX_LONG_LONG = (unsigned long long)(-1);
     // Adjusts the precision of the basic time type according to the system's life span,
     // forcing a compilation error through void when a counter overflow becomes possible.
-    typedef IF<(Traits<System>::LIFE_SPAN * 1000000 <= MAX_LONG), unsigned long,
-               IF<(Traits<System>::LIFE_SPAN * 1000000 <= MAX_LONG_LONG), unsigned long long,
-                  void>::Result>::Result Time_Base;
+//    typedef IF<(Traits<System>::LIFE_SPAN * 1000000 <= MAX_LONG), unsigned long,
+//               IF<(Traits<System>::LIFE_SPAN * 1000000 <= MAX_LONG_LONG), unsigned long long,
+//                  void>::Result>::Result Time_Base;
 
 protected:
     RTC_Common() {}
 
 public:
     // The time (as defined by God Chronos)
-    typedef Time_Base Microsecond;
-    typedef Time_Base Second;
+//    typedef Time_Base Microsecond;
+//    typedef Time_Base Second;
+    typedef unsigned long Microsecond;
+    typedef unsigned long Second;
+
 
     // Infinite times (for alarms and periodic threads)
     enum { INFINITE = -1 };

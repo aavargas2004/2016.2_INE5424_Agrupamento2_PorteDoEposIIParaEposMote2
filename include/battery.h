@@ -1,4 +1,4 @@
-// EPOS-- ARM7 CPU Mediator Initialization
+// EPOS Battery Mediator Common Package
 
 // This work is licensed under the EPOS Software License v1.0.
 // A copy of this license is available at the EPOS system source tree root.
@@ -6,19 +6,23 @@
 // http://epos.lisha.ufsc.br/EPOS+Software+License+v1.0
 // Note that EPOS Software License applies to both source code and executables.
 
-#include <cpu.h>
-#include <mmu.h>
-#include <tsc.h>
+#ifndef __battery_h
+#define __battery_h
+
+#include <system/config.h>
 
 __BEGIN_SYS
 
-void CPU::init()
+class Battery_Common
 {
-    db<Init, CPU>(TRC) << "CPU::init()\n";
-
-	MMU::init();
-
-	return;
-}
+protected:
+    Battery_Common() {}
+};
 
 __END_SYS
+
+#ifdef __BATTERY_H
+#include __BATTERY_H
+#endif
+
+#endif

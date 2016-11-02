@@ -14,8 +14,12 @@ class Timer_Common
 public:
     typedef TSC::Hertz Hertz;
     typedef int Tick;
-    typedef RTC::Microsecond Microsecond;
-    typedef IC::Interrupt_Handler Handler;
+//    typedef RTC::Microsecond Microsecond;
+//    typedef IC::Interrupt_Handler Handler;
+
+//matching function for call to 'EPOS::S::Timer_3::Timer_3(const unsigned int&, void (&)())'
+//  typedef TSC::Hertz Tick; //epos1
+    typedef void (Handler)();
 
 protected:
     Timer_Common() {}

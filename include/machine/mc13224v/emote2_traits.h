@@ -23,9 +23,15 @@ template <> struct Traits<Machine_Common>: public Traits<void>
 template <> struct Traits<Machine>: public Traits<Machine_Common>
 {
 	static const unsigned int MAX_CPUS = 1;
+	static const unsigned int CPUS = 1;
+
 	static const unsigned int CLOCK = 24000000;
+
 	static const unsigned int STACK_SIZE = 1024;
 	static const unsigned int HEAP_SIZE = 3072;
+	static const unsigned int APPLICATION_STACK_SIZE = 1024;
+	static const unsigned int APPLICATION_HEAP_SIZE = 3072;
+
 	static const unsigned int SYSTEM_HEAP_SIZE = 2*HEAP_SIZE;
 	static const bool SMP = false;
 	static const unsigned int MAX_THREADS = 7;

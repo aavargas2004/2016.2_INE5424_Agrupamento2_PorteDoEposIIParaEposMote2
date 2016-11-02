@@ -69,18 +69,18 @@ public:
     public:
         Header() {}
         Header(const Port & from, const Port & to, unsigned int size):
-            _from(htons(from)), _to(htons(to)), _length(htons((size > sizeof(Data) ? sizeof(Data) : size) + sizeof(Header))) {}
+            _from(CPU::htons(from)), _to(CPU::htons(to)), _length(CPU::htons((size > sizeof(Data) ? sizeof(Data) : size) + sizeof(Header))) {}
 
-        Port from() const { return ntohs(_from); }
-        Port to() const { return ntohs(_to); }
+        Port from() const { return CPU::ntohs(_from); }
+        Port to() const { return CPU::ntohs(_to); }
 
-        unsigned short length() const { return ntohs(_length); }
+        unsigned short length() const { return CPU::ntohs(_length); }
 
-        unsigned short checksum() const { return ntohs(_checksum); }
+        unsigned short checksum() const { return CPU::ntohs(_checksum); }
 
         friend OStream & operator<<(OStream & db, const Header & h) {
-            db << "{sp=" << ntohs(h._from) << ",dp=" << ntohs(h._to)
-               << ",len=" << ntohs(h._length) << ",chk=" << hex << ntohs(h._checksum) << dec << "}";
+            db << "{sp=" << CPU::ntohs(h._from) << ",dp=" << CPU::ntohs(h._to)
+               << ",len=" << CPU::ntohs(h._length) << ",chk=" << hex << CPU::ntohs(h._checksum) << dec << "}";
             return db;
         }
 

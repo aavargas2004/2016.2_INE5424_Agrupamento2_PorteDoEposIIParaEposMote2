@@ -40,27 +40,27 @@ public:
     {
     public:
         Packet(Oper op, const HA & sha, const PA & spa, const HA & tha, const PA & tpa)
-        : _htype(htons(HTYPE)), _ptype(htons(Network::PROTOCOL)), _hlen(sizeof(HA)), _plen(sizeof(PA)), _oper(htons(op)), _sha(sha), _spa(spa), _tha(tha), _tpa(tpa) {}
+        : _htype(CPU::htons(HTYPE)), _ptype(CPU::htons(Network::PROTOCOL)), _hlen(sizeof(HA)), _plen(sizeof(PA)), _oper(CPU::htons(op)), _sha(sha), _spa(spa), _tha(tha), _tpa(tpa) {}
         ~Packet() {}
 
-        void op(const Oper & o) { _oper = htons(o); }
+        void op(const Oper & o) { _oper = CPU::htons(o); }
         void sha(const HA & a) { _sha = a; }
         void spa(const PA & a) { _spa = a; }
         void tha(const HA & a) { _tha = a; }
         void tpa(const PA & a) { _tpa = a; }
 
-        Oper op() const { return ntohs(_oper); }
+        Oper op() const { return CPU::ntohs(_oper); }
         const HA & sha() const { return _sha; }
         const PA & spa() const { return _spa; }
         const HA & tha() const { return _tha; }
         const PA & tpa() const { return _tpa; }
 
         friend Debug & operator<<(Debug & db, const Packet & p) {
-            db  << "{htp=" << ntohs(p._htype)
-                << ",ptp=" << hex << ntohs(p._ptype) << dec
+            db  << "{htp=" << CPU::ntohs(p._htype)
+                << ",ptp=" << hex << CPU::ntohs(p._ptype) << dec
                 << ",hln=" << p._hlen
                 << ",pln=" << p._plen
-                << ",opc=" << ntohs(p._oper)
+                << ",opc=" << CPU::ntohs(p._oper)
                 << ",sha=" << p._sha
                 << ",spa=" << p._spa
                 << ",tha=" << p._tha

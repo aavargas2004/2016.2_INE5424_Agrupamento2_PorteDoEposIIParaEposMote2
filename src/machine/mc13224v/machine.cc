@@ -28,11 +28,11 @@ void Machine::unbrick() {
 
     cout << "This will reset the processor to original firmware.\n\r";
 
-    Machine_Buck_Regulator::NVM_1P8V_enable();
+    Buck_Regulator::NVM_1P8V_enable();
 
-    Machine_Flash::nvmErr_t err;
-    Machine_Flash::nvmType_t type = Machine_Flash::gNvmType_NoNvm_c;
-    err = Machine_Flash::nvm_detect(Machine_Flash::gNvmInternalInterface_c, &type);
+    Flash::nvmErr_t err;
+    Flash::nvmType_t type = Flash::gNvmType_NoNvm_c;
+    err = Flash::nvm_detect(Flash::gNvmInternalInterface_c, &type);
     if(err != 0) {
         cout << "Failed to detect NVM! (error = " << err << ")\n\r";
     }
