@@ -22,7 +22,6 @@ private:
     typedef Traits<NIC>::NICS NICS;
     static const unsigned int UNITS = NICS::Length;
 
-
 //observers utilizados em ip
 public:
     typedef Data_Observer<Buffer, Protocol> Observer;
@@ -31,13 +30,17 @@ public:
 
 
 public:
-    NIC(unsigned int unit = 0) {
-//        _dev = new Meta_NIC<NICS>::Get<0>::Result(unit);
+    template<unsigned int UNIT = 0>
+    NIC(unsigned int unit = UNIT) {
+//      _dev = new Meta_NIC<NICS>::Get<0>::Result(unit);
+        _dev = reinterpret_cast<Device *>(NICS::Get<UNIT>::Result::get(unit));
     }
 
     ~NIC() {
-//        delete _dev;
+//      delete _dev;
+        _dev = 0;
     }
+
 
 //    int send(const Address & dst, const Protocol & prot,
 //            const void * data, unsigned int size) {
@@ -59,7 +62,9 @@ public:
 
 //    void attach(Observer * obs, const Protocol & prot) { _dev->attach(obs, prot); }
 //    void detach(Observer * obs, const Protocol & prot) { _dev->detach(obs, prot); }
+
 //    void notify(const Protocol & prot) { _dev->notify(prot); }
+
 
     static void init();
 
@@ -94,7 +99,15 @@ public:
 
 public:
     static OP_Mode _mode;
+
+//TODO Device tipo
+    typedef IF<NICS::Polymorphic, NIC_Base<Radio_Common>, NICS::Get<0>::Result>::Result Device;
+
+//original:
 //    Meta_NIC<NICS>::Base * _dev;
+
+    Device * _dev;
+
 };
 
 __END_SYS
