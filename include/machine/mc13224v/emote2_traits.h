@@ -88,7 +88,7 @@ template <> struct Traits<NIC>: public Traits<void>
 
     typedef LIST<Radio> NICS;
 
-    static const unsigned int RADIO_UNITS = NICS::Count<Radio>::Result;
+    static const unsigned int UNITS = NICS::Count<Radio>::Result;
 };
 
 template <> struct Traits<ADC>: public Traits<void>

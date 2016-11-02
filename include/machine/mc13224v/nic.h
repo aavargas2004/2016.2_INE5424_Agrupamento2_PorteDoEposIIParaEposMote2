@@ -16,11 +16,19 @@
 
 __BEGIN_SYS
 
-class NIC//: public Radio_Common
+class NIC: public Radio_Common
 {
 private:
     typedef Traits<NIC>::NICS NICS;
     static const unsigned int UNITS = NICS::Length;
+
+
+//observers utilizados em ip
+public:
+    typedef Data_Observer<Buffer, Protocol> Observer;
+    typedef Data_Observed<Buffer, Protocol> Observed;
+
+
 
 public:
     NIC(unsigned int unit = 0) {
