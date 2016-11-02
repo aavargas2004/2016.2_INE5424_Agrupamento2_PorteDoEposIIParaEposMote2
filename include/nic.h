@@ -5,6 +5,7 @@
 
 #include <utility/string.h>
 #include <cpu.h>
+#include <utility/crc.h>
 
 __BEGIN_SYS
 

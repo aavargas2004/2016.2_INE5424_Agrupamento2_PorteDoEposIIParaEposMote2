@@ -48,9 +48,9 @@ public:
           const Protocol & prot, const void * data,
           const unsigned char & size)
     {
-//        header(dst, src, prot, size);
-//        memcpy(_data, data, size);
-//        _crc = CRC::crc16((char*)this, sizeof(Frame)-2);
+        header(dst, src, prot, size);
+        memcpy(_data, data, size);
+        _crc = CRC::crc16((char*)this, sizeof(Frame)-2);
     }
     
     Frame(const Address & dst, const Address & src,
@@ -58,11 +58,11 @@ public:
           const unsigned char & size, const char & tx_pow,
           const char & rss)
     {
-//        header(dst, src, prot, size);
-//        memcpy(_data, data, size);
-//        _tx_pow = tx_pow;
-//        _rss = rss;
-//        _crc = CRC::crc16((char*)this, sizeof(Frame)-2);
+        header(dst, src, prot, size);
+        memcpy(_data, data, size);
+        _tx_pow = tx_pow;
+        _rss = rss;
+        _crc = CRC::crc16((char*)this, sizeof(Frame)-2);
     }
 
     friend Debug & operator << (Debug & db, const Frame & f) {
@@ -91,9 +91,13 @@ public:
     unsigned char _len;
     unsigned char _tx_pow;
     unsigned char _rss;
-//    char _data[MTU];
+
     Data _data;
-    unsigned short _crc;
+//  char _data[MTU];
+
+    NIC_Common::CRC16 _crc;
+//  unsigned short _crc;
+
     };
 
     // Frame types
