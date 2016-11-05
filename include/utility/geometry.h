@@ -21,7 +21,7 @@ public:
     Distance operator-(const Point<T, 2> & p) const {
         T xx = p.x - x;
         T yy = p.y - y;
-        return sqrt(xx*xx + yy*yy);
+        return Math::sqrt(xx*xx + yy*yy);
     }
 
     bool operator==(const Point & p) const { return x == p.x and y == p.y; }
@@ -50,7 +50,7 @@ public:
         T xx = p.x - x;
         T yy = p.y - y;
         T zz = p.z - z;
-        return sqrt(xx*xx + yy*yy + zz*zz);
+        return Math::sqrt((xx*xx + yy*yy) + zz*zz);
     }
 
     bool operator==(const Point & p) const { return x == p.x and y == p.y and z == p.z; }
