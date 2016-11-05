@@ -95,7 +95,7 @@ void TSTP::Router::update(NIC::Observed * obs, NIC::Protocol prot, NIC::Buffer *
             send_buf->is_microframe = false;
 
             // Calculate offset
-            offset(send_buf);
+            //offset(send_buf);
 
             TSTP::_nic->send(send_buf);
         }
@@ -109,7 +109,7 @@ void TSTP::Router::marshal(Buffer * buf)
     buf->downlink = dest.center == TSTP::sink();
     buf->destined_to_me = dest.contains(TSTP::here(), TSTP::now());
 
-    offset(buf);
+    //offset(buf);
 }
 
 TSTP::Router::~Router()

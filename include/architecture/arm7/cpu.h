@@ -179,7 +179,8 @@ public:
     } 
 
     static bool tsl(volatile bool & lock) {
-        register Reg32 old;
+//'old' now is used initialized in this function
+        register Reg32 old = 1;
         ASM("mov %0, #1" : : "r"(old) :);
         ASM("swp %0, %0, [%1]" :  : "r"(old), "r"(&lock) :);
         return old;

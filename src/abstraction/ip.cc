@@ -115,7 +115,7 @@ void IP::update(NIC::Observed * obs, NIC::Protocol prot, Buffer * buf)
 
     // The Ethernet Frame in Buffer might have been padded, so we need to adjust it to the datagram length
     buf->size(packet->length());
-
+/*
     if((packet->flags() & Header::MF) || (packet->offset() != 0)) { // Fragmented
         Key key = ((packet->from() & ~_netmask) << 16) | packet->id();
         Reassembling::Element * el = _reassembling.search_key(key);
@@ -143,7 +143,9 @@ void IP::update(NIC::Observed * obs, NIC::Protocol prot, Buffer * buf)
         if(!notify(packet->protocol(), buf))
             buf->nic()->free(buf);
     }
+*/
 }
+
 
 void IP::Fragmented::reorder() {
     db<IP>(TRC) << "IP::Fragmented::reorder(this=" << this << ")" << endl;

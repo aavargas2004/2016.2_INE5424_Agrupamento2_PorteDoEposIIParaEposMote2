@@ -26,6 +26,8 @@ protected:
    	IC() {}
 
 public:
+//INT_RESCHEDULER now is a member of 'EPOS::S::IC
+        static const unsigned int INT_RESCHEDULER = 0;
 	typedef void (*Interrupt_Handler)();
 	static Interrupt_Handler vector[];
 
@@ -71,6 +73,8 @@ public:
 	}
 
 	static void int_handler();
+
+        static void ipi_send(unsigned int cpu, Interrupt_Id int_id) {}
 
 };
 

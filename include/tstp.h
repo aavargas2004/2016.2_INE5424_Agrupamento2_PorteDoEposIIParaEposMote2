@@ -800,13 +800,15 @@ public:
 
         void update(NIC::Observed * obs, NIC::Protocol prot, NIC::Buffer * buf);
 
-    private:
+//    private:
+//error: 'abs' was not declared in this scope
+/*
         static void offset(Buffer * buf) {
             //long long dist = abs(buf->my_distance - (buf->sender_distance - RADIO_RANGE));
             //long long betha = (G * RADIO_RADIUS * 1000000) / (dist * G);
             buf->offset = abs(buf->my_distance - (buf->sender_distance - RADIO_RANGE));
         }
-
+*/
     };
 
 
