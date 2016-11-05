@@ -1,4 +1,4 @@
-// EPOS-- MC13224V NIC Mediator Declarations
+// EPOS PLASMA NULL NIC Mediator Declarations
 
 // This work is licensed under the EPOS Software License v1.0.
 // A copy of this license is available at the EPOS system source tree root.
@@ -9,103 +9,85 @@
 #ifndef __mc13224v_nic_h
 #define __mc13224v_nic_h
 
+#include <system.h>
 #include <nic.h>
-#include <cmac.h>
-#include "radio.h"
-#include "buck_regulator.h"
+#include <ethernet.h>
+#include "machine.h"
+#include <utility/malloc.h>
 
 __BEGIN_SYS
 
-class NIC: public Radio_Common
+class NIC: public Ethernet
 {
+    friend class Machine;
+
 private:
     typedef Traits<NIC>::NICS NICS;
+    typedef IF<NICS::Polymorphic, NIC_Base<Ethernet>, NICS::Get<0>::Result>::Result Device;
     static const unsigned int UNITS = NICS::Length;
-
-//observers utilizados em ip
+  
 public:
     typedef Data_Observer<Buffer, Protocol> Observer;
     typedef Data_Observed<Buffer, Protocol> Observed;
 
-
-
 public:
     template<unsigned int UNIT = 0>
-    NIC(unsigned int unit = UNIT) {
-//      _dev = new Meta_NIC<NICS>::Get<0>::Result(unit);
-        _dev = reinterpret_cast<Device *>(NICS::Get<UNIT>::Result::get(unit));
-    }
+    NIC(unsigned int u = UNIT) { 
+        // _dev = reinterpret_cast<Device *>(NICS::Get<UNIT>::Result::get(u));
+     }
 
     ~NIC() {
-//      delete _dev;
         _dev = 0;
     }
 
+    int send(const Address & dst, const Protocol & prot, 
+	     const void * data, unsigned int size) {
+        return 0;
+    }
 
-//    int send(const Address & dst, const Protocol & prot,
-//            const void * data, unsigned int size) {
-//        return _dev->send(dst, prot, data, size);
-//    }
+    // Adress<UNITS> ==> UNITS is not what was supposed to be
+    int receive(Address * src, Protocol * prot,
+		void * data, unsigned int size) {
+        return 0;
+    }
 
-//    int receive(Address * src, Protocol * prot,
-//            void * data, unsigned int size) {
-//       return _dev->receive(src, prot, data, size);
-//    }
+    void reset() {}
+    
+    void attach(Observer * obs, const Protocol & prot) {}
+    void detach(Observer * obs, const Protocol & prot) {}
 
-//    void reset() {_dev->reset();}
+    unsigned int mtu() const { return (unsigned int)0; }
 
-//    unsigned int mtu() const {return _dev->mtu();}
+    const Address & address() {
+        return _Addr;
+    }
 
-//    const Address & address() {return _dev->address();}
+    const Statistics & statistics() {
+	return _Stat;
+    }
+    void address(const Address & address) { _Addr = address; }
 
-//    const Statistics & statistics() {return _dev->statistics();}
+    int send(Buffer * buf) { return 0; }
+    void free(Buffer * buf) { }
 
-//    void attach(Observer * obs, const Protocol & prot) { _dev->attach(obs, prot); }
-//    void detach(Observer * obs, const Protocol & prot) { _dev->detach(obs, prot); }
 
-//    void notify(const Protocol & prot) { _dev->notify(prot); }
+    // Buffer * alloc(const Address & dst, const Protocol & prot, unsigned int once, unsigned int always, unsigned int payload) { return 0; }
+    Buffer * alloc(const Address & dst, const Protocol & prot, unsigned int once, unsigned int always, unsigned int payload) { 
+    // return new (SYSTEM) Buffer(this, once + always + payload, once + always + payload); // the last parameter is passed to Phy_Frame as the length
+        return 0;
+    // return new (SYSTEM) Buffer(this, once + always + payload, once + always + payload); // the last parameter is passed to Phy_Frame as the length
 
+        // Buffer * b;
+        // return b;
+        // return _dev->alloc(this, dst, prot, once, always, payload); 
+
+    }
 
     static void init();
 
-    typedef char OP_Mode;
-    enum {
-        OFF = 0,
-        SEND_ONLY = 1,
-        RECV_ONLY = 2,
-        FULL = 3,
-    };
-
-//    static OP_Mode power() { return _mode; }
-//    static void power(OP_Mode mode)
-//    {
-//        if(mode == _mode) return;
-//
-//        switch(mode)
-//        {
-//        case FULL:
-//            MC13224V_Buck_Regulator::Radio_1P5V_txrx_enable();
-//            init();
-//            break;
-//        case SEND_ONLY:
-//            break;
-//        case RECV_ONLY:
-//            break;
-//        case OFF:
-//            MC13224V_Buck_Regulator::Radio_1P5V_disable();
-//            break;
-//        }
-//    }
-
-public:
-    static OP_Mode _mode;
-
-//TODO Device tipo
-    typedef IF<NICS::Polymorphic, NIC_Base<Radio_Common>, NICS::Get<0>::Result>::Result Device;
-
-//original:
-//    Meta_NIC<NICS>::Base * _dev;
-
+private:
+    Address _Addr;
+    Statistics _Stat;
     Device * _dev;
 
 };
@@ -113,3 +95,4 @@ public:
 __END_SYS
 
 #endif
+

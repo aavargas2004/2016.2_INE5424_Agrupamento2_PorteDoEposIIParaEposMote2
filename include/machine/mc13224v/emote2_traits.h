@@ -84,11 +84,17 @@ template <> struct Traits<Display>: public Traits<Machine_Common>
 
 template <> struct Traits<NIC>: public Traits<void>
 {
-    static const bool enabled = true;
+    // static const bool enabled = true;
+  static const bool enabled = false;
+  static const bool promiscuous = false;
 
-    typedef LIST<Radio> NICS;
+    typedef LIST<> NICS;
+    static const unsigned int UNITS = NICS::Length;
 
-    static const unsigned int UNITS = NICS::Count<Radio>::Result;
+
+    // typedef LIST<Radio> NICS;
+
+    // static const unsigned int UNITS = NICS::Count<Radio>::Result;
 };
 
 template <> struct Traits<ADC>: public Traits<void>

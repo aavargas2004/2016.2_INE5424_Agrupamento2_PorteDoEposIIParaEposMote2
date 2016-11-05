@@ -14,6 +14,7 @@
 #include <mmu.h>
 #include <tsc.h>
 #include "memory_map.h"
+#include "buck_regulator.h"
 
 __BEGIN_SYS
 
