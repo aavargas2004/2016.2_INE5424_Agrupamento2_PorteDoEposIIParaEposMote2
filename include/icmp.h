@@ -94,17 +94,17 @@ public:
         Header() {}
         Header(const Type & type, const Code & code): _type(type), _code(code) {}
         Header(const Type & type, const Code & code, unsigned short id, unsigned short seq):
-            _type(type), _code(code), _checksum(0), _id(CPU::htons(id)), _sequence(CPU::htons(seq)) {}
+            _type(type), _code(code), _checksum(0), _id(htons(id)), _sequence(htons(seq)) {}
 
         Type & type() { return _type; }
         Code & code() { return _code; }
         unsigned short checksum() { return _checksum; }
 
-        unsigned short id() { return CPU::htons(_id); }
-        void id(unsigned short id) { _id = CPU::htons(id); }
+        unsigned short id() { return htons(_id); }
+        void id(unsigned short id) { _id = htons(id); }
 
-        unsigned short sequence() { return CPU::htons(_sequence); }
-        void sequence(unsigned short seq) { _sequence = CPU::htons(seq); }
+        unsigned short sequence() { return htons(_sequence); }
+        void sequence(unsigned short seq) { _sequence = htons(seq); }
 
         const Address & ip();
         void ip (const Address & ip);
@@ -146,7 +146,7 @@ public:
         template<typename T>
         T * data() { return reinterpret_cast<T *>(&_data); }
 
-        void sum() { _checksum = 0; _checksum = CPU::htons(IP::checksum(reinterpret_cast<unsigned char *>(this), sizeof(Packet))); }
+        void sum() { _checksum = 0; _checksum = htons(IP::checksum(reinterpret_cast<unsigned char *>(this), sizeof(Packet))); }
         bool check() { return (IP::checksum(reinterpret_cast<unsigned char *>(this), sizeof(Packet)) != 0xffff); }
 
         friend Debug & operator<<(Debug & db, const Packet & p) {

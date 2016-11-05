@@ -55,23 +55,23 @@ public:
     public:
         Header() {}
         Header(const Port & from, const Port & to, unsigned int sequence, unsigned short window)
-        : _from(CPU::htons(from)), _to(CPU::htons(to)), _sequence(CPU::htonl(sequence)), _acknowledgment(0), _data_offset(DO), _flags(0), _window(CPU::htons(window)), _checksum(0), _urgent_pointer(0) {}
+        : _from(htons(from)), _to(htons(to)), _sequence(htonl(sequence)), _acknowledgment(0), _data_offset(DO), _flags(0), _window(htons(window)), _checksum(0), _urgent_pointer(0) {}
 
-        Port from() const { return CPU::ntohs(_from); }
-        Port to() const { return CPU::ntohs(_to); }
+        Port from() const { return ntohs(_from); }
+        Port to() const { return ntohs(_to); }
 
-        unsigned int sequence() const { return CPU::ntohl(_sequence); }
-        unsigned int acknowledgment() const { return CPU::ntohl(_acknowledgment); }
+        unsigned int sequence() const { return ntohl(_sequence); }
+        unsigned int acknowledgment() const { return ntohl(_acknowledgment); }
         unsigned int flags() const { return _flags; }
-        unsigned int window() const { return CPU::ntohs(_window); }
+        unsigned int window() const { return ntohs(_window); }
 
-        unsigned short checksum() const { return CPU::ntohs(_checksum); }
+        unsigned short checksum() const { return ntohs(_checksum); }
 
         friend OStream & operator<<(OStream & db, const Header & h) {
-            db << "{sp=" << hex << CPU::ntohs(h._from) << ",dp=" << CPU::ntohs(h._to)
-               << ",seq=" << CPU::ntohl(h._sequence) << ",ack=" << CPU::ntohl(h._acknowledgment)
+            db << "{sp=" << hex << ntohs(h._from) << ",dp=" << ntohs(h._to)
+               << ",seq=" << ntohl(h._sequence) << ",ack=" << ntohl(h._acknowledgment)
                << ",flg=" << ((h._flags & ACK) ? 'A' : '-') << ((h._flags & RST) ? 'R' : '-') << ((h._flags & SYN) ? 'S' : '-') << ((h._flags & FIN) ? 'F' : '-')
-               << ",win=" << dec << CPU::ntohs(h._window) << ",chk=" << hex << CPU::ntohs(h._checksum) << dec << "}";
+               << ",win=" << dec << ntohs(h._window) << ",chk=" << hex << ntohs(h._checksum) << dec << "}";
             return db;
         }
 
@@ -140,7 +140,7 @@ public:
 
     public:
         Connection(const Port & from, const Address & to)
-        : Header(from, to.port(), Random::random() & 0x00ffffff, WINDOW), _peer(to.ip()), _peer_window(0), _next(CPU::ntohl(_sequence)),
+        : Header(from, to.port(), Random::random() & 0x00ffffff, WINDOW), _peer(to.ip()), _peer_window(0), _next(ntohl(_sequence)),
           _unacknowledged(_next), _initial(_next), _state(CLOSED), _handler(&Connection::closed), _current(0), _length(0), _valid(false),
           _streaming(false), _retransmiting(false), _timeout_handler(&timeout,this), _alarm(0), _tries(0), _observer(0) {}
         ~Connection() { if(_alarm) delete _alarm; close(); }
@@ -177,7 +177,7 @@ public:
 
         friend Debug & operator<<(Debug & db, const Connection & c) {
             db << *c.header()
-               << ",peer=" << c._peer << ",pwin=" << c._peer_window << ",uack=" << CPU::ntohl(c._unacknowledged) << ",stat=" << c._state;
+               << ",peer=" << c._peer << ",pwin=" << c._peer_window << ",uack=" << ntohl(c._unacknowledged) << ",stat=" << c._state;
             if(c._current)
                 db << ",curr=" << c._current << " => " << *c._current << ",len=" << c._length;
             return db;

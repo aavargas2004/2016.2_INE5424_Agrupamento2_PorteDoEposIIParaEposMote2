@@ -60,25 +60,25 @@ public:
     public:
         Header() {}
         Header(const Address & from, const Address & to, const Protocol & prot, unsigned int size) :
-            _ihl(IHL), _version(VER), _tos(TOS), _length(CPU::htons(size)), _id(CPU::htons(_next_id++)),
+            _ihl(IHL), _version(VER), _tos(TOS), _length(htons(size)), _id(htons(_next_id++)),
             _offset(0), _flags(0), _ttl(TTL), _protocol(prot), _checksum(0), _from(from), _to(to) {}
 
-        unsigned short length() const { return CPU::ntohs(_length); }
-        void length(unsigned short length) { _length = CPU::htons(length); }
+        unsigned short length() const { return ntohs(_length); }
+        void length(unsigned short length) { _length = htons(length); }
 
-        unsigned short id() const { return CPU::ntohs(_id); }
+        unsigned short id() const { return ntohs(_id); }
 
         // Offsets in bytes that are converted to 8-byte unities
-        unsigned short offset() const { return (CPU::ntohs((_flags << 13) | _offset) & 0x1fff) << 3; }
+        unsigned short offset() const { return (ntohs((_flags << 13) | _offset) & 0x1fff) << 3; }
         void offset(unsigned short off) {
-            unsigned short tmp = CPU::htons((flags() << 13) | (off >> 3));
+            unsigned short tmp = htons((flags() << 13) | (off >> 3));
             _offset = tmp & 0x1fff;
             _flags  = tmp >> 13;
         }
 
-        unsigned short flags() const { return CPU::ntohs((_flags << 13) | _offset) >> 13; }
+        unsigned short flags() const { return ntohs((_flags << 13) | _offset) >> 13; }
         void flags(unsigned short flg) {
-            unsigned short tmp = CPU::htons((flg << 13) | (offset() >> 3));
+            unsigned short tmp = htons((flg << 13) | (offset() >> 3));
             _offset = tmp & 0x1fff;
             _flags  = tmp >> 13;
         }
@@ -87,9 +87,9 @@ public:
 
         const Protocol & protocol() const { return _protocol; }
 
-        unsigned short checksum() const { return CPU::ntohs(_checksum); }
+        unsigned short checksum() const { return ntohs(_checksum); }
 
-        void sum() { _checksum = 0; _checksum = CPU::htons(IP::checksum(reinterpret_cast<unsigned char *>(this), _ihl * 4)); }
+        void sum() { _checksum = 0; _checksum = htons(IP::checksum(reinterpret_cast<unsigned char *>(this), _ihl * 4)); }
         bool check() { return (IP::checksum(reinterpret_cast<unsigned char *>(this), _ihl * 4) != 0xffff); }
 
         const Address & from() const { return _from; }
@@ -138,7 +138,7 @@ public:
     {
     public:
         Pseudo_Header(const Address & from, const Address & to, const Protocol & prot, unsigned int size) :
-            _from(from), _to(to), _zero(0), _protocol(prot), _length(CPU::htons(size)) {};
+            _from(from), _to(to), _zero(0), _protocol(prot), _length(htons(size)) {};
 
     private:
         IP::Address _from;
