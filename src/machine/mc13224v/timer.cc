@@ -10,6 +10,8 @@ __BEGIN_SYS
 
 Timer::Handler* Timer::handlers[4];
 
+typedef void (Handler)();
+
 __END_SYS
 
 __USING_SYS

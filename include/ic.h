@@ -13,7 +13,7 @@ protected:
     IC_Common() {}
 
 public:
-    typedef unsigned int Interrupt_Id;
+    typedef long unsigned int Interrupt_Id;
     typedef void (* Interrupt_Handler)(const Interrupt_Id &);
 };
 

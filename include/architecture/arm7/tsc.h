@@ -19,7 +19,7 @@ class TSC: public TSC_Common
 {
 private:
     static const unsigned int CLOCK = Traits<Machine>::CLOCK;
-    static const unsigned int RESOLUTION = (2^sizeof(CPU::Reg16))/CLOCK;
+    static const long unsigned int RESOLUTION = (2^sizeof(CPU::Reg16))/CLOCK;
 
 public:
     TSC() {}
@@ -33,7 +33,7 @@ public:
 private:
     static void tsc_timer_handler();
 
-    static volatile unsigned long _ts;
+    static long volatile unsigned _ts;
 };
 
 __END_SYS
