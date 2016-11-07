@@ -22,7 +22,7 @@ class Timer: public Timer_Common
 protected:
     static const unsigned int CLOCK = Traits<Machine>::CLOCK;
 	unsigned int instance, offset;
-	static Handler* handlers[4];
+	static Handler handlers[4];
 	
 	
 	typedef RTC::Microsecond Microsecond;
@@ -50,7 +50,7 @@ public:
 		Timer(10, &handler, instance);
     }
 
-    Timer(const Hertz& f, Handler *handler, const INSTANCE instance):
+    Timer(const Hertz& f, Handler handler, const INSTANCE instance):
 		instance(instance), offset(instance * 0x20) {
 
 		ctrl(0x20); // untill CNTR reach COMP1

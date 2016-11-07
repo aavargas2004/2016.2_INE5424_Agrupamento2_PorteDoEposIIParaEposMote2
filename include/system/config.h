@@ -7,15 +7,15 @@
 // ARCHITECTURE, MACHINE, AND APPLICATION SELECTION
 // This section is generated automatically from makedefs by $EPOS/etc/makefile
 //============================================================================
-#define MODE library
-#define ARCH arm7
-#define MACH mc13224v
-#define MMOD emote2
-#define APPL hello
-#define __mode_library__
-#define __arch_arm7__
-#define __mach_mc13224v__
-#define __mmod_emote2__
+#define MODE xxx
+#define ARCH xxx
+#define MACH xxx
+#define MMOD xxx
+#define APPL xxx
+#define __mode_xxx__
+#define __arch_xxx__
+#define __mach_xxx__
+#define __mmod_xxx__
 
 #if defined (__arch_avr__)
 #define __no_networking__
