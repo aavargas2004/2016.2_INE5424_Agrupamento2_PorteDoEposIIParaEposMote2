@@ -64,17 +64,19 @@ public:
     static void check_flash_erase();
     static void unbrick();
 
+    static void pre_init(System_Info * si) {} //To-Do
+
 private:
 
 //TODO não existe originalmente esta função no epos1
-static void pre_init(System_Info * si) {
+//static void pre_init(System_Info * si) {
         //Machine_Model::pre_init();
 
 //        Display::init();
 
   //      if(Traits<System>::multicore)
    //         smp_init(si->bm.n_cpus);
-    }
+  //  }
 
 };
 

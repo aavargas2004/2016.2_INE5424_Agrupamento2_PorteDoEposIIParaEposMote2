@@ -22,7 +22,7 @@ class MMU: public MMU_Common<0, 0, 0>
 {
 private:
     typedef Simple_Grouping_List<unsigned int> List;
-    static const unsigned int PHY_MEM = Memory_Map<Machine>::PHY_MEM;
+    static const unsigned int PHY_MEM = Memory_Map::PHY_MEM;
 
 public:
     //Dummy DMA_Buffer (AVR CPU's does not make DMA)

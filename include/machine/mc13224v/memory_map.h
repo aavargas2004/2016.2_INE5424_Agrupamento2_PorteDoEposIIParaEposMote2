@@ -13,8 +13,8 @@
 
 __BEGIN_SYS
 
-template <>
-struct Memory_Map<Machine>
+//template <>
+struct Memory_Map//<Machine>
 {
     enum {
     	MEM_BASE =  0,
