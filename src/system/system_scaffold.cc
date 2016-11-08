@@ -15,6 +15,7 @@ __BEGIN_SYS
 class First_Object
 {
 public:
+//TODO toda a função pre_init era feita neste construtor no epos1 sem chamar pre_init
     First_Object() {
 	Machine::pre_init(reinterpret_cast<System_Info *>(Memory_Map::SYS_INFO));
     }

@@ -22,7 +22,7 @@ class Timer: public Timer_Common
 protected:
     static const unsigned int CLOCK = Traits<Machine>::CLOCK;
 	unsigned int instance, offset;
-	static Handler* handlers[4];
+	static Handler handlers[4];
 	
 	
 	typedef RTC::Microsecond Microsecond;
@@ -47,10 +47,10 @@ public:
 
     Timer(Handler handler, const INSTANCE instance){
 		// 100ms as a default period
-		Timer(10, &handler, instance);
+		Timer(10, handler, instance);
     }
 
-    Timer(const Hertz& f, Handler *handler, const INSTANCE instance):
+    Timer(const Hertz& f, Handler handler, const INSTANCE instance):
 		instance(instance), offset(instance * 0x20) {
 
 		ctrl(0x20); // untill CNTR reach COMP1
@@ -162,27 +162,27 @@ class Timer_0: public Timer{
 public:
 	static const unsigned int FREQUENCY = Traits<Timer_0>::FREQUENCY;
 	Timer_0(Handler handler): 
-		Timer(FREQUENCY, &handler, TIMER0){}
+		Timer(FREQUENCY, handler, TIMER0){}
 	Timer_0(const Microsecond& quantum, Handler handler):
-		Timer(1000000/quantum, &handler, TIMER0){}
+		Timer(1000000/quantum, handler, TIMER0){}
 };
 
 class Timer_1: public Timer{
 public:
 	static const unsigned int FREQUENCY = Traits<Timer_1>::FREQUENCY;
 	Timer_1(Handler handler): 
-		Timer(FREQUENCY, &handler, TIMER1){}
+		Timer(FREQUENCY, handler, TIMER1){}
 	Timer_1(const Microsecond& quantum, Handler handler):
-		Timer(1000000/quantum, &handler, TIMER1){}
+		Timer(1000000/quantum, handler, TIMER1){}
 };
 
 class Timer_2: public Timer{
 public:
 	static const unsigned int FREQUENCY = Traits<Timer_2>::FREQUENCY;
 	Timer_2(Handler handler): 
-		Timer(FREQUENCY, &handler, TIMER2){}
+		Timer(FREQUENCY, handler, TIMER2){}
 	Timer_2(const Microsecond& quantum, Handler handler):
-		Timer(1000000/quantum, &handler, TIMER2){}
+		Timer(1000000/quantum, handler, TIMER2){}
 };
 
 //Obs: Timer_3 is being used by the TSC
@@ -191,9 +191,9 @@ class Timer_3: public Timer{
 public:
 	static const unsigned int FREQUENCY = Traits<Timer_3>::FREQUENCY;
 	Timer_3(Handler handler): 
-		Timer(FREQUENCY, &handler, TIMER3){}
+		Timer(FREQUENCY, handler, TIMER3){}
 	Timer_3(const Microsecond& quantum, Handler handler):
-		Timer(1000000/quantum, &handler, TIMER3){}
+		Timer(1000000/quantum, handler, TIMER3){}
 };
 
 
